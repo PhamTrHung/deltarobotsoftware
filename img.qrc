@@ -1,0 +1,25 @@
+<RCC>
+    <qresource prefix="/">
+        <file>icons/home.png</file>
+        <file>icons/mainwindow.png</file>
+        <file>icons/compass.png</file>
+        <file>icons/triangle.png</file>
+        <file>icons/webcam_off.png</file>
+        <file>icons/webcam_on.png</file>
+        <file>icons/photography.png</file>
+        <file>icons/play.png</file>
+        <file>icons/stop-button.png</file>
+        <file>icons/disk.png</file>
+        <file>icons/plus.png</file>
+        <file>icons/letter-g.png</file>
+        <file>icons/off-button.png</file>
+        <file>icons/on-button.png</file>
+        <file>icons/settings.png</file>
+        <file>icons/setting.png</file>
+        <file>icons/robotic-hand.png</file>
+        <file>icons/imgStart.jpg</file>
+        <file>icons/frame.png</file>
+        <file>icons/graph.png</file>
+        <file>icons/measure.png</file>
+    </qresource>
+</RCC>

@@ -1,0 +1,212 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Form Files">
+      <UniqueIdentifier>{99349809-55BA-4b9d-BF79-8FDBB0286EB3}</UniqueIdentifier>
+      <Extensions>ui</Extensions>
+      <ParseFiles>false</ParseFiles>
+    </Filter>
+    <Filter Include="Form Files">
+      <UniqueIdentifier>{99349809-55BA-4b9d-BF79-8FDBB0286EB3}</UniqueIdentifier>
+      <Extensions>ui</Extensions>
+      <ParseFiles>false</ParseFiles>
+    </Filter>
+    <Filter Include="Generated Files">
+      <UniqueIdentifier>{71ED8ED8-ACB9-4CE9-BBE1-E00B30144E11}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;moc;h;def;odl;idl;res;</Extensions>
+    </Filter>
+    <Filter Include="Generated Files">
+      <UniqueIdentifier>{71ED8ED8-ACB9-4CE9-BBE1-E00B30144E11}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;moc;h;def;odl;idl;res;</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{D9D6E242-F8AF-46E4-B9FD-80ECBC20BA3E}</UniqueIdentifier>
+      <Extensions>qrc;*</Extensions>
+      <ParseFiles>false</ParseFiles>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{D9D6E242-F8AF-46E4-B9FD-80ECBC20BA3E}</UniqueIdentifier>
+      <Extensions>qrc;*</Extensions>
+      <ParseFiles>false</ParseFiles>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="camerawidget.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="connectionmanager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="connectionsettings.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="deltavisualizer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="gcodeprogrammanager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="gcodewindow.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="hsvwindow.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="imageprocessor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="mainwindow.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="objectmanager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="objectvariabletable.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="camerawidget.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="connectionmanager.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="connectionsettings.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="deltavisualizer.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="gcodeprogrammanager.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="gcodewindow.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="hsvwindow.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="imageprocessor.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="mainwindow.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="objectmanager.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="objectvariabletable.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="debug\moc_predefs.h.cbt">
+      <Filter>Generated Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="release\moc_predefs.h.cbt">
+      <Filter>Generated Files</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <QtUic Include="connectionsettings.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="gcodewindow.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="hsvwindow.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="mainwindow.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="icons\compass.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="icons\disk.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="icons\frame.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="icons\graph.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="icons\home.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <QtRcc Include="img.qrc">
+      <Filter>Resource Files</Filter>
+    </QtRcc>
+    <None Include="icons\imgStart.jpg">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="icons\letter-g.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="icons\mainwindow.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="icons\measure.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="icons\off-button.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="icons\on-button.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="icons\photography.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="icons\play.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="icons\plus.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="icons\robotic-hand.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="icons\setting.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="icons\settings.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="icons\stop-button.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="icons\triangle.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="icons\webcam_off.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="icons\webcam_on.png">
+      <Filter>Resource Files</Filter>
+    </None>
+  </ItemGroup>
+</Project>
