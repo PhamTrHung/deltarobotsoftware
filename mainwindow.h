@@ -60,6 +60,8 @@ public slots:
 
     void changeCalibTool();
 
+    void showBigCalibWindow();
+
 private:
     Ui::MainWindow *ui;
 
@@ -68,7 +70,8 @@ private:
     void showStatusMessage(const QString &message);
     bool isConnected = false;
 
-
+    QWidget* bigCalibWindow;
+    QVBoxLayout* cameraBox;
 
 };
 #endif // MAINWINDOW_H

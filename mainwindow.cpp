@@ -1,4 +1,4 @@
-#include "mainwindow.h"
+﻿#include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QDebug>
 
@@ -47,6 +47,15 @@ void MainWindow::initVariables()
     gcodeView = new GCodeWindow(this);
     deltaGcodeManager = new GcodeProgramManager(gcodeView->teGcodeWidget, ui->btnStartProgram, m_connection);
 
+    //
+    bigCalibWindow = new QWidget();
+    bigCalibWindow->setWindowTitle("Camera window");
+    bigCalibWindow->setWindowFlags(Qt::WindowStaysOnTopHint);
+
+    cameraBox = new QVBoxLayout(ui->lblCam->parentWidget());
+    cameraBox->setGeometry(QRect(0,0,100,100));
+    cameraBox->addWidget(ui->lblCam);
+    
 }
 
 void MainWindow::initEvents()
@@ -107,6 +116,11 @@ void MainWindow::initEvents()
     connect(ui->lblCam, SIGNAL(finishSelectCalibLine(QPoint,QPoint)), deltaImageProcessor, SLOT(getCalibLine(QPoint,QPoint)));
     connect(ui->lblCam, SIGNAL(finishSelectCalibPoint(int,int)), deltaImageProcessor, SLOT(getCalibPoint(int,int)));
     connect(ui->lblCam, SIGNAL(finishSelectProcessArea(QRect)), deltaImageProcessor, SLOT(getProcessArea(QRect)));
+    connect(ui->lblCam, SIGNAL(finishSelectedTransformPoints(QPoint, QPoint, QPoint, QPoint)), deltaImageProcessor, SLOT(getPerspectivePoints(QPoint, QPoint, QPoint, QPoint)));
+    connect(ui->btnTransform, SIGNAL(clicked(bool)), this, SLOT(showBigCalibWindow()));
+    connect(ui->lblCam, SIGNAL(sizeChange()), deltaImageProcessor, SLOT(updateRatios()));
+    connect(ui->btnSaveSettings, SIGNAL(clicked(bool)), deltaImageProcessor, SLOT(saveSetting()));
+    connect(ui->btnLoadSettings, SIGNAL(clicked(bool)), deltaImageProcessor, SLOT(loadSetting()));
 }
 
 void MainWindow::triggerConnect()
@@ -201,7 +215,7 @@ void MainWindow::updateValueWhenClickGo()
 
 void MainWindow::updateDeltaPositionFromGUI()
 {
-    m_connection->sendData(QString("G01 X") + ui->lbX->text() + QString(" Y") + ui->lbY->text() + QString(" Z") + ui->lbZ->text() + "\n");
+    m_connection->sendData(QString("G01 X") + ui->lbX->text() + QString(" Y") + ui->lbY->text() + QString(" Z") + ui->lbZ->text() + QString(" F") + ui->leVeloc->text());
 }
 
 void MainWindow::turnOnConveyor()
@@ -324,12 +338,25 @@ void MainWindow::changeCalibTool()
 
 }
 
-
-
-
-
-
-
-
+void MainWindow::showBigCalibWindow()
+{
+    QPushButton* btn = qobject_cast<QPushButton*>(sender());
+    if (btn->isChecked()) {
+        ui->lblCam->setParent(bigCalibWindow);
+        bigCalibWindow->show();
+        ui->lblCam->changeSize(800, 600);
+        deltaImageProcessor->turnOffPerspectiveMode();
+        return;
+    }
+    
+    if (!btn->isChecked()) {
+        deltaImageProcessor->turnOnPerspectiveMode();
+        ui->lblCam->changeSize(500, 300); //Bắt buộc change size trước khi addWidget, nếu không sẽ sai tỉ lệ
+        //Do addWidget có cơ chế tự động thay đổi widget cho vừa với layout, ...
+        cameraBox->addWidget(ui->lblCam);
+        bigCalibWindow->close();
+        return;
+    }
+}
 
 

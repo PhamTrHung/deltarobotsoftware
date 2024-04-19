@@ -50,7 +50,7 @@ void ImageProcessor::updateLabelImage(cv::Mat mat, QLabel *label)
     //QImage img = QImage(mat.data, mat.cols, mat.rows, mat.step, QImage::Format_RGB888);
 
     label->setPixmap(QPixmap::fromImage(img));
-    //label->setScaledContents(true);
+    label->setScaledContents(true);
     //label->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
 }
 
@@ -72,11 +72,62 @@ void ImageProcessor::setMeasureParameterPointer(QLineEdit *xCoor, QLineEdit *yCo
     leYCoor = yCoor;
 }
 
+void ImageProcessor::getPerspectivePoints(QPoint p1, QPoint p2, QPoint p3, QPoint p4)
+{
+    DPerspectivePoints[0] = p1;
+    DPerspectivePoints[1] = p2;
+    DPerspectivePoints[2] = p3;
+    DPerspectivePoints[3] = p4;
+
+    PPerspectivePoints.clear();
+    PPerspectivePoints.push_back(cv::Point(p1.x() / DnPWRatio, p1.y() / DnPHRatio));
+    PPerspectivePoints.push_back(cv::Point(p2.x() / DnPWRatio, p2.y() / DnPHRatio));
+    PPerspectivePoints.push_back(cv::Point(p3.x() / DnPWRatio, p3.y() / DnPHRatio));
+    PPerspectivePoints.push_back(cv::Point(p4.x() / DnPWRatio, p4.y() / DnPHRatio));
+}
+
+void ImageProcessor::turnOnPerspectiveMode()
+{
+    isPerspectiveMode = true;
+}
+
+void ImageProcessor::turnOffPerspectiveMode()
+{
+    isPerspectiveMode = false;
+}
+
 void ImageProcessor::displayAdditionalInfor()
 {
     if (calibImage.empty()) return;
-    cv::putText(calibImage, std::string("x = ") + leXCoor->text().toStdString() + ", y = " + leYCoor->text().toStdString(), cv::Point(DCalibPoint.x(), DCalibPoint.y() + 15), cv::FONT_HERSHEY_COMPLEX, 0.4, cv::Scalar(255, 255, 0), 1);
-    cv::putText(calibImage, leDistance->text().toStdString() + " mm", cv::Point(DCalibLine.center().x() - 15, DCalibLine.center().y() + 15), cv::FONT_HERSHEY_COMPLEX, 0.4, cv::Scalar(255, 255, 0), 1);
+
+    int offset = 1;
+    int thin = 1;
+
+    //draw process rectangle
+    drawBlackWhiteRect(calibImage, PSelectedRect);
+    drawCorner(calibImage, cv::Point(PSelectedRect.x, PSelectedRect.y));
+    drawCorner(calibImage, cv::Point(PSelectedRect.x + PSelectedRect.width, PSelectedRect.y + PSelectedRect.height));
+
+    //Draw perspective area
+    if (!isPerspectiveMode) {
+        if (DPerspectivePoints != NULL) {
+            for (int i = 0; i < 3; ++i) {
+                drawBlackWhiteLine(calibImage, PPerspectivePoints[i], PPerspectivePoints[i + 1], thin);
+                drawCorner(calibImage, PPerspectivePoints[i]);
+            }
+            drawBlackWhiteLine(calibImage, PPerspectivePoints[3], PPerspectivePoints[0], thin);
+            drawCorner(calibImage, PPerspectivePoints[3]);
+        }
+    }
+    
+    //Point
+    cv::rectangle(calibImage, cv::Rect(PcalibPoint.x - 2, PcalibPoint.y - 2, 5, 5), WHITE_COLOR, cv::FILLED);
+    cv::putText(calibImage, std::string("x = ") + leXCoor->text().toStdString() + ", y = " + leYCoor->text().toStdString(), cv::Point(PcalibPoint.x, PcalibPoint.y - 10), cv::FONT_HERSHEY_COMPLEX, 0.6, cv::Scalar(255, 255, 0), 1);
+    //Line
+    drawLine(calibImage, cv::Point(DCalibLine.p1().x() / DnPWRatio, DCalibLine.p1().y() / DnPHRatio), cv::Point(DCalibLine.p2().x() / DnPWRatio, DCalibLine.p2().y() / DnPHRatio));
+    cv::rectangle(calibImage, cv::Rect(DCalibLine.p1().x() / DnPWRatio - 2, DCalibLine.p1().y() / DnPHRatio - 2, 3, 3), WHITE_COLOR, cv::FILLED);
+    cv::rectangle(calibImage, cv::Rect(DCalibLine.p2().x() / DnPWRatio - 2, DCalibLine.p2().y() / DnPHRatio - 2, 3, 3), WHITE_COLOR, cv::FILLED);
+    cv::putText(calibImage, leDistance->text().toStdString() + " mm", cv::Point(DCalibLine.center().x() / DnPWRatio - 5, DCalibLine.center().y() / DnPHRatio - 10), cv::FONT_HERSHEY_COMPLEX, 0.6, cv::Scalar(255, 255, 0), 1);
 }
 
 void ImageProcessor::loadCamera(bool state)
@@ -88,12 +139,13 @@ void ImageProcessor::loadCamera(bool state)
             cameraTimerInterval = 1000/cameraFPS;
             updateScreenTimer->start(cameraTimerInterval);
         }
+        
+        lbResultImage->initParameter();
 
         camera->open(idCamera, cv::CAP_DSHOW);
-        camera->set(cv::CAP_PROP_FRAME_WIDTH, 600);
-        camera->set(cv::CAP_PROP_FRAME_HEIGHT, 400);
+        camera->set(cv::CAP_PROP_FRAME_WIDTH, 800);
+        camera->set(cv::CAP_PROP_FRAME_HEIGHT, 600);
 
-        lbResultImage->initParameter();
         updateRatios();
 
         isCameraPause = false;
@@ -169,16 +221,26 @@ void ImageProcessor::getCalibPoint(int x, int y)
     DCalibPoint.setY(y);
 
     if (captureImage.cols > 0) {
-        PcalibPoint.x = x / DnPRatio;
-        PcalibPoint.y = y / DnPRatio;
+        PcalibPoint.x = x / DnPWRatio;
+        PcalibPoint.y = y / DnPHRatio;
     }
 
     if (leXCoor == nullptr) return;
 
+    //qDebug() << "DnPWRatio = " << DnPWRatio;
+    //qDebug() << "DnPHRatio = " << DnPHRatio;
+
+    //qDebug() << "x = " << x;
+    //qDebug() << "y = " << y;
+
     float xRealCalibPoint = leXCoor->text().toFloat();
     float yRealCalibPoint = leYCoor->text().toFloat();
 
+    //qDebug() << "xreal = " << xRealCalibPoint;
+    //qDebug() << "yreal = " << yRealCalibPoint;
+
     // X axis up
+    // góc giữa hệ tọa độ vật so với hệ tọa độ robot delta
     float theta = M_PI_2;
 
     cv::Mat rotateMatrix = (cv::Mat_<float>(3, 3) << cos(theta), -sin(theta), 0,
@@ -186,32 +248,37 @@ void ImageProcessor::getCalibPoint(int x, int y)
                                                      0, 0, 1);
 
     cv::Mat scaleMatrix = (cv::Mat_<float>(3, 3) << 1.0f / PnRRatio, 0, 0,
-                                                    0, 1.0f / PnRRatio, 0,
+                                                    0, -1.0f / PnRRatio, 0,
                                                     0, 0, 1);
+    //qDebug() << "PnRRatio = " << PnRRatio;
     
     cv::Mat scaleRotateMatrix = rotateMatrix * scaleMatrix;
+    //qDebug() << scaleRotateMatrix.at<float>(2, 2);
 
     // x' = m11 * x + m21 * y + dx   --> dx = x' - (m11 * x + m21 * y)
     // y' = m12 * x + m22 * y + dy   --> dy = y' - (m12 * x + m22 * y)
 
-    float dx = xRealCalibPoint - (scaleRotateMatrix.at<float>(0, 0) * (x / DnPRatio) + scaleRotateMatrix.at<float>(1, 0) * (y / DnPRatio));
-    float dy = yRealCalibPoint - (scaleRotateMatrix.at<float>(0, 1) * (x / DnPRatio) + scaleRotateMatrix.at<float>(1, 1) * (y / DnPRatio));
+    float dx = xRealCalibPoint - (scaleRotateMatrix.at<float>(0, 0) * (PcalibPoint.x) + scaleRotateMatrix.at<float>(1, 0) * (PcalibPoint.y));
+    float dy = yRealCalibPoint - (scaleRotateMatrix.at<float>(0, 1) * (PcalibPoint.x) + scaleRotateMatrix.at<float>(1, 1) * (PcalibPoint.y));
 
-    P2RMatrix = (cv::Mat_<float>(3, 3) << scaleRotateMatrix.at<float>(0, 0), scaleRotateMatrix.at<float>(0, 1), 0,
-                                          scaleRotateMatrix.at<float>(1, 0), scaleRotateMatrix.at<float>(1, 1), 0,
-                                          dx, dy, 1);
+    P2RMatrix = (cv::Mat_<float>(3, 3) << scaleRotateMatrix.at<float>(0, 0), scaleRotateMatrix.at<float>(1, 0), dx,
+                                          scaleRotateMatrix.at<float>(0, 1), scaleRotateMatrix.at<float>(1, 1), dy,
+                                          0, 0, 1);
 
-    cv::Mat result = P2RMatrix * (cv::Mat_<float>(3, 1) << x / DnPRatio, y / DnPRatio, 0);
-    qDebug() << result.at<float>(0, 0);
-    qDebug() << result.at<float>(1, 0);
-    qDebug() << result.at<float>(2, 0);
+    cv::Mat result = P2RMatrix * (cv::Mat_<float>(3, 1) << PcalibPoint.x, PcalibPoint.y, 1);
+    qDebug() << "result x = " << result.at<float>(0, 0);
+    qDebug() << "result y = " << result.at<float>(1, 0);
+    //qDebug() << result.at<float>(2, 0);
 }
 
 void ImageProcessor::getDistance(int distance)
 {
     float realDistance = leDistance->text().toFloat();
 
-    float processDistance = realDistance / DnPRatio;
+    float processDistance = processDistanceValue;
+    
+    //qDebug() << "real distance = " << realDistance;
+    //qDebug() << "process distance = " << processDistance;
 
     PnRRatio = processDistance / realDistance;
     DnRRatio = (float)distance / realDistance;
@@ -219,12 +286,13 @@ void ImageProcessor::getDistance(int distance)
 
 void ImageProcessor::getProcessArea(QRect processArea)
 {
+    
     DSelectedRect = processArea;
 
-    PSelectedRect.width = processArea.width() / DnPRatio;
-    PSelectedRect.height = processArea.height() / DnPRatio;
-    PSelectedRect.x = processArea.x() / DnPRatio;
-    PSelectedRect.y = processArea.y() / DnPRatio;
+    PSelectedRect.width = processArea.width() / DnPWRatio;
+    PSelectedRect.height = processArea.height() / DnPHRatio;
+    PSelectedRect.x = processArea.x() / DnPWRatio;
+    PSelectedRect.y = processArea.y() / DnPHRatio;
 
 }
 
@@ -232,6 +300,12 @@ void ImageProcessor::getCalibLine(QPoint p1, QPoint p2)
 {
     DCalibLine.setP1(p1);
     DCalibLine.setP2(p2);
+
+    QLineF line;
+    line.setP1(QPointF(p1.x() * DnPWRatio, p1.y() * DnPHRatio));
+    line.setP2(QPointF(p2.x() * DnPWRatio, p2.y() * DnPHRatio));
+    //qDebug() << "real distance process = " << line.length();
+    processDistanceValue = line.length();
 }
 
 void ImageProcessor::processImage()
@@ -240,8 +314,11 @@ void ImageProcessor::processImage()
         return;
     }
 
+    captureImage.copyTo(originalImage);
+
     //Copy to calib image
     captureImage.copyTo(calibImage);
+    if (isPerspectiveMode) transformPerspective(calibImage, PPerspectivePoints, calibImage);
 
     //Filter image
     HSV_CaptureImage = captureImage.clone();
@@ -264,7 +341,7 @@ void ImageProcessor::processImage()
     //display
 
     if(imgMode == ORIGIN){
-        updateLabelImage(captureImage, lbResultImage);
+        updateLabelImage(originalImage, lbResultImage);
     }else if(imgMode == HSV_PROCESSEING){
         updateLabelImage(HSV_CaptureImage, lbResultImage);
     }else if(imgMode == RESULT){
@@ -342,7 +419,7 @@ void ImageProcessor::findObjectRectangle(cv::Mat &mat, std::vector<cv::Point> co
     int xRealObject = 0;
     int yRealObject = 0;
 
-    cv::Mat PPoint = (cv::Mat_<float>(3,1) << minRect.center.x / DnPRatio, minRect.center.y / DnPRatio, 0);
+    cv::Mat PPoint = (cv::Mat_<float>(3,1) << minRect.center.x / DnPRatio, minRect.center.y / DnPRatio, 1);
     cv::Mat RPoint = P2RMatrix * PPoint;
 
     xRealObject = RPoint.at<float>(0,0);
@@ -380,10 +457,10 @@ void ImageProcessor::makeBrightProcessRegion(cv::Mat resultMats)
 
 
     cv::Rect rect;
-    rect.width = DSelectedRect.width();
-    rect.height = DSelectedRect.height();
-    rect.x = DSelectedRect.x();
-    rect.y = DSelectedRect.y() + 30;
+    rect.width = PSelectedRect.width;
+    rect.height = PSelectedRect.height;
+    rect.x = PSelectedRect.x;
+    rect.y = PSelectedRect.y;
 
     cv::rectangle(filterMat, rect, WHITE_COLOR, cv::FILLED);
 
@@ -418,12 +495,123 @@ void ImageProcessor::selectProcessingRegion(cv::Mat proImg)
     cv::bitwise_and(filterMat, proImg, proImg);
 }
 
+void ImageProcessor::drawBlackWhiteLine(cv::Mat displayMat, cv::Point p1, cv::Point p2, int thin)
+{
+    cv::line(displayMat, p1, p2, BLACK_COLOR, thin);
+    cv::line(displayMat, cv::Point(p1.x + 1, p1.y + 1), cv::Point(p2.x + 1, p2.y + 1), WHITE_COLOR, thin);
+}
+
+void ImageProcessor::drawBlackWhiteLine(cv::Mat displayMat, QLine line, int thin)
+{
+    cv::Point p1 = cv::Point(line.x1(), line.y1());
+    cv::Point p2 = cv::Point(line.x2(), line.y2());
+
+    drawBlackWhiteLine(displayMat, p1, p2, thin);
+}
+
+void ImageProcessor::drawBlackWhiteLines(cv::Mat displayMat, std::vector<cv::Point> points, int thin)
+{
+    cv::polylines(displayMat, points, true, BLACK_COLOR, thin);
+    cv::polylines(displayMat, points, true, WHITE_COLOR, thin);
+}
+
+void ImageProcessor::drawBlackWhiteRect(cv::Mat displayMat, cv::Point p, cv::Size size)
+{
+    cv::rectangle(displayMat, cv::Rect(p, size), BLACK_COLOR, 1);
+    cv::rectangle(displayMat, cv::Rect(cv::Point(p.x + 1, p.y + 1), size), WHITE_COLOR, 1);
+}
+
+void ImageProcessor::drawBlackWhiteRect(cv::Mat displayMat, cv::Rect rect)
+{
+    cv::Point pos = cv::Point(rect.x, rect.y);
+    cv::Point pos2 = cv::Point(rect.x - 1, rect.y - 1);
+    cv::Size size = cv::Size(rect.size().width, rect.size().height);
+    cv::Size size2 = cv::Size(rect.size().width + 2, rect.size().height + 2);
+
+    cv::rectangle(displayMat, cv::Rect(pos, size), BLACK_COLOR, 1);
+    cv::rectangle(displayMat, cv::Rect(pos2, size2), WHITE_COLOR, 1);
+}
+
+void ImageProcessor::drawLine(cv::Mat displayMat, cv::Point p1, cv::Point p2)
+{
+    drawBlackWhiteLine(displayMat, p1, p2, 1);
+}
+
+void ImageProcessor::drawCorner(cv::Mat displayMat, cv::Point p)
+{
+    cv::Point RectcvPoint1 = cv::Point(p.x - 4, p.y - 4);
+
+    drawBlackWhiteRect(displayMat, RectcvPoint1, cv::Size(10, 10));
+}
+
+void ImageProcessor::transformPerspective(cv::Mat inputMat, std::vector<cv::Point> points, cv::Mat outputMat)
+{
+    cv::Point2f inputQuad[4];
+    cv::Point2f outputQuad[4];
+
+    inputQuad[0] = points[0];
+    inputQuad[1] = points[1];
+    inputQuad[2] = points[2];
+    inputQuad[3] = points[3];
+
+    // ----- Find new position -------
+
+    cv::Point2f center;
+    center.x = (points[0].x + points[1].x + points[2].x + points[3].x) / 4;
+    center.y = (points[0].y + points[1].y + points[2].y + points[3].y) / 4;
+
+    int maxLength = 0;
+
+    for (int i = 0; i < 4; ++i) {
+        QLineF line;
+        line.setP1(QPoint(inputQuad[i].x, inputQuad[i].y));
+        if (i == 3) {
+            line.setP2(QPoint(inputQuad[0].x, inputQuad[0].y));
+        }
+        else {
+            line.setP2(QPoint(inputQuad[i+1].x, inputQuad[i+1].y));
+        }
+
+        int len = line.length();
+        if (len > maxLength) maxLength = len;
+    }
+
+    int halfLen = maxLength / 2;
+
+    outputQuad[0] = center + cv::Point2f(-halfLen, -halfLen);
+    outputQuad[1] = center + cv::Point2f(-halfLen, halfLen);
+    outputQuad[2] = center + cv::Point2f(halfLen, halfLen);
+    outputQuad[3] = center + cv::Point2f(halfLen, -halfLen);
+
+    //cv::Mat lambda = cv::Mat::zeros(inputMat.rows, inputMat.cols, inputMat.type());
+
+    cv::Mat lambda = cv::getPerspectiveTransform(inputQuad, outputQuad);
+
+    cv::warpPerspective(inputMat, outputMat, lambda, outputMat.size());
+}
+
 void ImageProcessor::updateRatios()
 {
     //Tỷ lệ chuyển đổi từ kích thước label screen sang kích thước thực camera
     DnPRatio = (float)lbResultImage->width()/camera->get(cv::CAP_PROP_FRAME_WIDTH);
+
+    DnPWRatio = (float)lbResultImage->width() / camera->get(cv::CAP_PROP_FRAME_WIDTH);
+    DnPHRatio = (float)lbResultImage->height() / camera->get(cv::CAP_PROP_FRAME_HEIGHT);
     
     cameraRatio = (float)camera->get(cv::CAP_PROP_FRAME_WIDTH)/camera->get(cv::CAP_PROP_FRAME_HEIGHT);
-
 }
+
+void ImageProcessor::saveSetting()
+{
+    if (imgMode != CALIB) return;
+    lbResultImage->saveSetting();
+}
+
+void ImageProcessor::loadSetting()
+{
+    if (imgMode != CALIB) return;
+    lbResultImage->loadSetting();
+}
+
+
 

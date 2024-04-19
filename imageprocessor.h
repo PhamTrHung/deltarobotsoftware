@@ -46,7 +46,7 @@ public:
     void setObjectInforLabelWidget(QLabel* lbTracking, QLabel* lbVisible);
     
     void setMeasureParameterPointer(QLineEdit* xCoor, QLineEdit* yCoor, QLineEdit* distance);
-    
+
     void displayAdditionalInfor();
 
     int runningCamera = -1;
@@ -79,12 +79,19 @@ public slots:
     void getDistance(int);
     void getProcessArea(QRect);
     void getCalibLine(QPoint, QPoint);
+    void getPerspectivePoints(QPoint, QPoint, QPoint, QPoint);
+    void turnOnPerspectiveMode();
+    void turnOffPerspectiveMode();
+
+    void updateRatios();
+
+    void saveSetting();
+    void loadSetting();
 
 signals:
     void objectPositionChanged(std::vector<cv::RotatedRect> objectContainer);
 
 private:
-
     void processImage();
     void detectObject(cv::Mat input, cv::Mat output, cv::Scalar color);
     void findObjectRectangle(cv::Mat &mat, std::vector<cv::Point> contour, cv::Scalar color);
@@ -95,11 +102,22 @@ private:
     void makeBrightProcessRegion(cv::Mat resultMats);
     void selectProcessingRegion(cv::Mat proImg);
 
+    void drawBlackWhiteLine(cv::Mat displayMat, cv::Point p1, cv::Point p2, int thin);
+    void drawBlackWhiteLine(cv::Mat displayMat, QLine line, int thin);
+    void drawBlackWhiteLines(cv::Mat displayMat, std::vector<cv::Point> points, int thin);
+    void drawBlackWhiteRect(cv::Mat displayMat, cv::Point p, cv::Size s);
+    void drawBlackWhiteRect(cv::Mat displayMat, cv::Rect rect);
+    void drawLine(cv::Mat displayMat, cv::Point p1, cv::Point p2);
+    void drawCorner(cv::Mat displayMat, cv::Point p);
+
+    void transformPerspective(cv::Mat inputMat, std::vector<cv::Point> points, cv::Mat outputMat);
+
     QTimer* updateScreenTimer;
     cv::Mat captureImage;
     cv::Mat HSV_CaptureImage;
     cv::Mat resultImage;
     cv::Mat calibImage;
+    cv::Mat originalImage;
 
     CameraWidget* lbResultImage;
 
@@ -115,21 +133,27 @@ private:
     QLineEdit* leXCoor = nullptr;
     QLineEdit* leYCoor = nullptr;
 
-    void updateRatios();
 
     float DnPRatio{ 1.0f };
     float PnRRatio{ 1.0f };
     float DnRRatio{ 1.0f };
     float cameraRatio{ 1.0f };
+    
+    float DnPWRatio{ 1.0f };
+    float DnPHRatio{ 1.0f };
 
     QPoint DCalibPoint;
     QLine DCalibLine;
     QRect DSelectedRect;
+    QPoint DPerspectivePoints[4];
     
+    std::vector<cv::Point> PPerspectivePoints;
     cv::Point PcalibPoint;
     cv::Rect PSelectedRect;
-
     cv::Mat P2RMatrix;
+
+    bool isPerspectiveMode = false;
+    float processDistanceValue = 0;
 };
 
 #endif // IMAGEPROCESSOR_H

@@ -209,4 +209,23 @@
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="resource.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="DeltaRobotSoftware.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="icons\file.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="icons\house.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="icons\save.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
 </Project>

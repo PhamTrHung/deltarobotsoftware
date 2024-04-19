@@ -41,7 +41,7 @@
   <widget class="QWidget" name="centralwidget">
    <property name="styleSheet">
     <string notr="true">QWidget{
-background-color: rgb(194, 255, 230);
+background-color: rgb(248, 248, 248);
 }</string>
    </property>
    <layout class="QVBoxLayout" name="verticalLayout_7">
@@ -69,7 +69,7 @@ background-color: rgb(194, 255, 230);
        <enum>QTabWidget::Triangular</enum>
       </property>
       <property name="currentIndex">
-       <number>2</number>
+       <number>0</number>
       </property>
       <property name="elideMode">
        <enum>Qt::ElideNone</enum>
@@ -1400,7 +1400,7 @@ QPushButton:pressed
         </property>
         <property name="icon">
          <iconset resource="img.qrc">
-          <normaloff>:/icons/home.png</normaloff>:/icons/home.png</iconset>
+          <normaloff>:/icons/house.png</normaloff>:/icons/house.png</iconset>
         </property>
         <property name="iconSize">
          <size>
@@ -1552,19 +1552,6 @@ QPushButton:pressed
        <attribute name="title">
         <string>            Image Processing           </string>
        </attribute>
-       <widget class="CameraWidget" name="lblCam" native="true">
-        <property name="geometry">
-         <rect>
-          <x>320</x>
-          <y>40</y>
-          <width>500</width>
-          <height>300</height>
-         </rect>
-        </property>
-        <property name="cursor">
-         <cursorShape>CrossCursor</cursorShape>
-        </property>
-       </widget>
        <widget class="QGroupBox" name="groupBox_7">
         <property name="geometry">
          <rect>
@@ -1896,7 +1883,7 @@ QPushButton:pressed
          <rect>
           <x>10</x>
           <y>250</y>
-          <width>241</width>
+          <width>251</width>
           <height>111</height>
          </rect>
         </property>
@@ -1995,7 +1982,7 @@ QPushButton:pressed
         <widget class="QLineEdit" name="leYCoordinate">
          <property name="geometry">
           <rect>
-           <x>190</x>
+           <x>200</x>
            <y>50</y>
            <width>41</width>
            <height>22</height>
@@ -2044,7 +2031,7 @@ QPushButton:pressed
         <widget class="QLabel" name="label_19">
          <property name="geometry">
           <rect>
-           <x>180</x>
+           <x>190</x>
            <y>50</y>
            <width>16</width>
            <height>21</height>
@@ -2059,6 +2046,56 @@ QPushButton:pressed
           <string>Y</string>
          </property>
         </widget>
+        <widget class="QPushButton" name="btnTransform">
+         <property name="geometry">
+          <rect>
+           <x>130</x>
+           <y>80</y>
+           <width>61</width>
+           <height>24</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Transform</string>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="btnSaveSettings">
+         <property name="geometry">
+          <rect>
+           <x>200</x>
+           <y>80</y>
+           <width>21</width>
+           <height>24</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="icon">
+          <iconset>
+           <normaloff>icons/save.png</normaloff>icons/save.png</iconset>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="btnLoadSettings">
+         <property name="geometry">
+          <rect>
+           <x>220</x>
+           <y>80</y>
+           <width>21</width>
+           <height>24</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="icon">
+          <iconset>
+           <normaloff>icons/file.png</normaloff>icons/file.png</iconset>
+         </property>
+        </widget>
         <zorder>label_18</zorder>
         <zorder>label_19</zorder>
         <zorder>btnLine</zorder>
@@ -2068,6 +2105,35 @@ QPushButton:pressed
         <zorder>leXCoordinate</zorder>
         <zorder>leYCoordinate</zorder>
         <zorder>label_17</zorder>
+        <zorder>btnTransform</zorder>
+        <zorder>btnSaveSettings</zorder>
+        <zorder>btnLoadSettings</zorder>
+       </widget>
+       <widget class="QGroupBox" name="grpCam">
+        <property name="geometry">
+         <rect>
+          <x>300</x>
+          <y>40</y>
+          <width>521</width>
+          <height>321</height>
+         </rect>
+        </property>
+        <property name="title">
+         <string/>
+        </property>
+        <widget class="CameraWidget" name="lblCam" native="true">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>10</y>
+           <width>500</width>
+           <height>300</height>
+          </rect>
+         </property>
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
+         </property>
+        </widget>
        </widget>
       </widget>
      </widget>

@@ -277,6 +277,17 @@
     <None Include="icons\webcam_off.png" />
     <None Include="icons\webcam_on.png" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="resource.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="DeltaRobotSoftware.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="icons\file.png" />
+    <Image Include="icons\house.png" />
+    <Image Include="icons\save.png" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <Import Project="$(QtMsBuild)\qt.targets" Condition="Exists('$(QtMsBuild)\qt.targets')" />
   <ImportGroup Label="ExtensionTargets" />

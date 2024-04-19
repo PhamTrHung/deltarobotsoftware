@@ -21,5 +21,8 @@
         <file>icons/frame.png</file>
         <file>icons/graph.png</file>
         <file>icons/measure.png</file>
+        <file>icons/file.png</file>
+        <file>icons/house.png</file>
+        <file>icons/save.png</file>
     </qresource>
 </RCC>

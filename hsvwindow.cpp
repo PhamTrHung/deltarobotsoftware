@@ -7,6 +7,8 @@ HSVWindow::HSVWindow(QWidget *parent)
     , ui(new Ui::HSVWindow)
 {
     ui->setupUi(this);
+    
+    setGeometry(250, 145, 329, 319);
 
 
     initVariables();

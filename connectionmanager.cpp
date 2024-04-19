@@ -23,7 +23,7 @@ void ConnectionManager::processReceiveData()
     if(receiveLine.mid(0,2) == "Ok" || (receiveLine.indexOf('k') > -1 && receiveLine.indexOf('O') > -1)
                                     || receiveLine.mid(0, 7) == "Unknown"){
 
-        emit deltaRespondGcodeDone();
+        //emit deltaRespondGcodeDone();
     }
 }
 
@@ -90,7 +90,7 @@ void ConnectionManager::readData()
 
     while(m_serial->canReadLine()){
         receiveLine = m_serial->readLine();
-        //qDebug() << receiveLine;
+        qDebug() << receiveLine;
 
         processReceiveData();
     }

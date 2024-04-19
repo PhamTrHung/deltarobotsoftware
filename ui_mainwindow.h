@@ -95,7 +95,6 @@ public:
     QPushButton *btnSettingConnect;
     QPushButton *btnConnect;
     QWidget *tab3;
-    CameraWidget *lblCam;
     QGroupBox *groupBox_7;
     QPushButton *btnLoadCam;
     QPushButton *btnCaptureImage;
@@ -131,6 +130,11 @@ public:
     QLabel *label_17;
     QLabel *label_18;
     QLabel *label_19;
+    QPushButton *btnTransform;
+    QPushButton *btnSaveSettings;
+    QPushButton *btnLoadSettings;
+    QGroupBox *grpCam;
+    CameraWidget *lblCam;
     QStatusBar *statusbar;
 
     void setupUi(QMainWindow *MainWindow)
@@ -149,7 +153,7 @@ public:
         centralwidget = new QWidget(MainWindow);
         centralwidget->setObjectName("centralwidget");
         centralwidget->setStyleSheet(QString::fromUtf8("QWidget{\n"
-"background-color: rgb(194, 255, 230);\n"
+"background-color: rgb(248, 248, 248);\n"
 "}"));
         verticalLayout_7 = new QVBoxLayout(centralwidget);
         verticalLayout_7->setObjectName("verticalLayout_7");
@@ -762,7 +766,7 @@ public:
 "	background-color:rgb(255, 0, 0);\n"
 "}"));
         QIcon icon2;
-        icon2.addFile(QString::fromUtf8(":/icons/home.png"), QSize(), QIcon::Normal, QIcon::Off);
+        icon2.addFile(QString::fromUtf8(":/icons/house.png"), QSize(), QIcon::Normal, QIcon::Off);
         btnHoming->setIcon(icon2);
         btnHoming->setIconSize(QSize(70, 70));
         gbConnection = new QGroupBox(tab1);
@@ -850,10 +854,6 @@ public:
         tabWidget->addTab(tab1, QString());
         tab3 = new QWidget();
         tab3->setObjectName("tab3");
-        lblCam = new CameraWidget(tab3);
-        lblCam->setObjectName("lblCam");
-        lblCam->setGeometry(QRect(320, 40, 500, 300));
-        lblCam->setCursor(QCursor(Qt::CrossCursor));
         groupBox_7 = new QGroupBox(tab3);
         groupBox_7->setObjectName("groupBox_7");
         groupBox_7->setGeometry(QRect(10, 10, 231, 91));
@@ -994,7 +994,7 @@ public:
         btnGCodeView->setIconSize(QSize(20, 20));
         groupBox = new QGroupBox(tab3);
         groupBox->setObjectName("groupBox");
-        groupBox->setGeometry(QRect(10, 250, 241, 111));
+        groupBox->setGeometry(QRect(10, 250, 251, 111));
         btnLine = new QPushButton(groupBox);
         btnLine->setObjectName("btnLine");
         btnLine->setGeometry(QRect(10, 20, 91, 24));
@@ -1025,7 +1025,7 @@ public:
         leXCoordinate->setGeometry(QRect(130, 50, 41, 22));
         leYCoordinate = new QLineEdit(groupBox);
         leYCoordinate->setObjectName("leYCoordinate");
-        leYCoordinate->setGeometry(QRect(190, 50, 41, 22));
+        leYCoordinate->setGeometry(QRect(200, 50, 41, 22));
         label_17 = new QLabel(groupBox);
         label_17->setObjectName("label_17");
         label_17->setGeometry(QRect(190, 21, 41, 21));
@@ -1036,8 +1036,24 @@ public:
         label_18->setFont(font3);
         label_19 = new QLabel(groupBox);
         label_19->setObjectName("label_19");
-        label_19->setGeometry(QRect(180, 50, 16, 21));
+        label_19->setGeometry(QRect(190, 50, 16, 21));
         label_19->setFont(font3);
+        btnTransform = new QPushButton(groupBox);
+        btnTransform->setObjectName("btnTransform");
+        btnTransform->setGeometry(QRect(130, 80, 61, 24));
+        btnTransform->setCheckable(true);
+        btnSaveSettings = new QPushButton(groupBox);
+        btnSaveSettings->setObjectName("btnSaveSettings");
+        btnSaveSettings->setGeometry(QRect(200, 80, 21, 24));
+        QIcon icon11;
+        icon11.addFile(QString::fromUtf8("icons/save.png"), QSize(), QIcon::Normal, QIcon::Off);
+        btnSaveSettings->setIcon(icon11);
+        btnLoadSettings = new QPushButton(groupBox);
+        btnLoadSettings->setObjectName("btnLoadSettings");
+        btnLoadSettings->setGeometry(QRect(220, 80, 21, 24));
+        QIcon icon12;
+        icon12.addFile(QString::fromUtf8("icons/file.png"), QSize(), QIcon::Normal, QIcon::Off);
+        btnLoadSettings->setIcon(icon12);
         label_18->raise();
         label_19->raise();
         btnLine->raise();
@@ -1047,6 +1063,16 @@ public:
         leXCoordinate->raise();
         leYCoordinate->raise();
         label_17->raise();
+        btnTransform->raise();
+        btnSaveSettings->raise();
+        btnLoadSettings->raise();
+        grpCam = new QGroupBox(tab3);
+        grpCam->setObjectName("grpCam");
+        grpCam->setGeometry(QRect(300, 40, 521, 321));
+        lblCam = new CameraWidget(grpCam);
+        lblCam->setObjectName("lblCam");
+        lblCam->setGeometry(QRect(10, 10, 500, 300));
+        lblCam->setCursor(QCursor(Qt::PointingHandCursor));
         tabWidget->addTab(tab3, QString());
 
         verticalLayout_7->addWidget(tabWidget);
@@ -1058,7 +1084,7 @@ public:
 
         retranslateUi(MainWindow);
 
-        tabWidget->setCurrentIndex(2);
+        tabWidget->setCurrentIndex(0);
         tabWidget_2->setCurrentIndex(1);
 
 
@@ -1152,6 +1178,10 @@ public:
         label_17->setText(QCoreApplication::translate("MainWindow", "mm", nullptr));
         label_18->setText(QCoreApplication::translate("MainWindow", "X", nullptr));
         label_19->setText(QCoreApplication::translate("MainWindow", "Y", nullptr));
+        btnTransform->setText(QCoreApplication::translate("MainWindow", "Transform", nullptr));
+        btnSaveSettings->setText(QString());
+        btnLoadSettings->setText(QString());
+        grpCam->setTitle(QString());
         tabWidget->setTabText(tabWidget->indexOf(tab3), QCoreApplication::translate("MainWindow", "            Image Processing           ", nullptr));
     } // retranslateUi
 
