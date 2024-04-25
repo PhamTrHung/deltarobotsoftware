@@ -16,6 +16,8 @@
 #include <QtWidgets/QGroupBox>
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QLabel>
+#include <QtWidgets/QLineEdit>
+#include <QtWidgets/QPushButton>
 #include <QtWidgets/QSlider>
 #include <QtWidgets/QVBoxLayout>
 
@@ -49,17 +51,30 @@ public:
     QLabel *lblMaxS;
     QLabel *lblMinV;
     QLabel *lblMaxV;
+    QHBoxLayout *horizontalLayout_3;
+    QPushButton *btnObject1;
+    QPushButton *btnObject2;
+    QPushButton *btnObject3;
+    QHBoxLayout *horizontalLayout_4;
+    QLineEdit *leObject1Name;
+    QLineEdit *leObject2Name;
+    QLineEdit *leObject3Name;
 
     void setupUi(QDialog *HSVWindow)
     {
         if (HSVWindow->objectName().isEmpty())
             HSVWindow->setObjectName("HSVWindow");
-        HSVWindow->resize(329, 319);
+        HSVWindow->resize(305, 338);
         HSVWindow->setMaximumSize(QSize(600, 800));
         gridLayout = new QGridLayout(HSVWindow);
         gridLayout->setObjectName("gridLayout");
         groupBox = new QGroupBox(HSVWindow);
         groupBox->setObjectName("groupBox");
+        QSizePolicy sizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
+        sizePolicy.setHorizontalStretch(0);
+        sizePolicy.setVerticalStretch(0);
+        sizePolicy.setHeightForWidth(groupBox->sizePolicy().hasHeightForWidth());
+        groupBox->setSizePolicy(sizePolicy);
         horizontalLayout_2 = new QHBoxLayout(groupBox);
         horizontalLayout_2->setObjectName("horizontalLayout_2");
         horizontalLayout = new QHBoxLayout();
@@ -192,6 +207,64 @@ public:
 
         gridLayout->addWidget(groupBox, 0, 0, 1, 1);
 
+        horizontalLayout_3 = new QHBoxLayout();
+        horizontalLayout_3->setObjectName("horizontalLayout_3");
+        btnObject1 = new QPushButton(HSVWindow);
+        btnObject1->setObjectName("btnObject1");
+        btnObject1->setFocusPolicy(Qt::NoFocus);
+        btnObject1->setStyleSheet(QString::fromUtf8("\n"
+"QPushButton:pressed\n"
+"{\n"
+"	background-color:rgb(255, 255, 0);\n"
+"}"));
+
+        horizontalLayout_3->addWidget(btnObject1);
+
+        btnObject2 = new QPushButton(HSVWindow);
+        btnObject2->setObjectName("btnObject2");
+        btnObject2->setFocusPolicy(Qt::NoFocus);
+        btnObject2->setStyleSheet(QString::fromUtf8("\n"
+"QPushButton:pressed\n"
+"{\n"
+"	background-color:rgb(255, 255, 0);\n"
+"}"));
+
+        horizontalLayout_3->addWidget(btnObject2);
+
+        btnObject3 = new QPushButton(HSVWindow);
+        btnObject3->setObjectName("btnObject3");
+        btnObject3->setFocusPolicy(Qt::NoFocus);
+        btnObject3->setStyleSheet(QString::fromUtf8("\n"
+"QPushButton:pressed\n"
+"{\n"
+"	background-color:rgb(255, 255, 0);\n"
+"}"));
+
+        horizontalLayout_3->addWidget(btnObject3);
+
+
+        gridLayout->addLayout(horizontalLayout_3, 1, 0, 1, 1);
+
+        horizontalLayout_4 = new QHBoxLayout();
+        horizontalLayout_4->setObjectName("horizontalLayout_4");
+        leObject1Name = new QLineEdit(HSVWindow);
+        leObject1Name->setObjectName("leObject1Name");
+
+        horizontalLayout_4->addWidget(leObject1Name);
+
+        leObject2Name = new QLineEdit(HSVWindow);
+        leObject2Name->setObjectName("leObject2Name");
+
+        horizontalLayout_4->addWidget(leObject2Name);
+
+        leObject3Name = new QLineEdit(HSVWindow);
+        leObject3Name->setObjectName("leObject3Name");
+
+        horizontalLayout_4->addWidget(leObject3Name);
+
+
+        gridLayout->addLayout(horizontalLayout_4, 2, 0, 1, 1);
+
 
         retranslateUi(HSVWindow);
 
@@ -214,6 +287,12 @@ public:
         lblMaxS->setText(QCoreApplication::translate("HSVWindow", "255", nullptr));
         lblMinV->setText(QCoreApplication::translate("HSVWindow", "0", nullptr));
         lblMaxV->setText(QCoreApplication::translate("HSVWindow", "255", nullptr));
+        btnObject1->setText(QCoreApplication::translate("HSVWindow", "Add Object 1", nullptr));
+        btnObject2->setText(QCoreApplication::translate("HSVWindow", "Add Object 2", nullptr));
+        btnObject3->setText(QCoreApplication::translate("HSVWindow", "Add Object 3", nullptr));
+        leObject1Name->setText(QCoreApplication::translate("HSVWindow", "Object 1", nullptr));
+        leObject2Name->setText(QCoreApplication::translate("HSVWindow", "Object 2", nullptr));
+        leObject3Name->setText(QCoreApplication::translate("HSVWindow", "Object 3", nullptr));
     } // retranslateUi
 
 };

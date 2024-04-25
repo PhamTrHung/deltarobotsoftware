@@ -10,6 +10,7 @@ ImageProcessor::ImageProcessor(QWidget *parent)
     parameterPanel = new HSVWindow(parent);
     connect(parameterPanel, SIGNAL(valueChanged(int,int,int,int,int,int)),
             this, SLOT(setHSV(int,int,int,int,int,int)));
+    connect(parameterPanel, SIGNAL(addObject(int, QString)), this, SLOT(getObjectsInfor(int, QString)));
 
     camera = new cv::VideoCapture();
 
@@ -215,6 +216,28 @@ void ImageProcessor::setHSV(int minH, int maxH, int minS, int maxS, int minV, in
     HSV_Value[5] = maxV;
 }
 
+void ImageProcessor::getObjectsInfor(int numberObject, QString nameObject)
+{
+    if (numberObject == 1) {
+        nameObjectInfor[numberObject - 1] = nameObject;
+        for (uint8_t i = 0; i < 6; ++i) {
+            HSV_OBJECT[numberObject - 1][i] = HSV_Value[i];
+        }
+    }
+    else if (numberObject == 2) {
+        nameObjectInfor[numberObject - 1] = nameObject;
+        for (uint8_t i = 0; i < 6; ++i) {
+            HSV_OBJECT[numberObject - 1][i] = HSV_Value[i];
+        }
+    }
+    else if (numberObject == 3) {
+        nameObjectInfor[numberObject - 1] = nameObject;
+        for (uint8_t i = 0; i < 6; ++i) {
+            HSV_OBJECT[numberObject - 1][i] = HSV_Value[i];
+        }
+    }
+}
+
 void ImageProcessor::getCalibPoint(int x, int y)
 {
     DCalibPoint.setX(x);
@@ -266,8 +289,8 @@ void ImageProcessor::getCalibPoint(int x, int y)
                                           0, 0, 1);
 
     cv::Mat result = P2RMatrix * (cv::Mat_<float>(3, 1) << PcalibPoint.x, PcalibPoint.y, 1);
-    qDebug() << "result x = " << result.at<float>(0, 0);
-    qDebug() << "result y = " << result.at<float>(1, 0);
+    //qDebug() << "result x = " << result.at<float>(0, 0);
+    //qDebug() << "result y = " << result.at<float>(1, 0);
     //qDebug() << result.at<float>(2, 0);
 }
 
@@ -323,6 +346,9 @@ void ImageProcessor::processImage()
     //Filter image
     HSV_CaptureImage = captureImage.clone();
     cv::cvtColor(HSV_CaptureImage, HSV_CaptureImage, cv::COLOR_BGR2HSV);
+    for (uint8_t i = 0; i < 3; ++i) {
+            HSV_CaptureImage.copyTo(objectImage[i]);
+    }
 
     cv::Scalar minScalar(HSV_Value[0], HSV_Value[2], HSV_Value[4]);
     cv::Scalar maxScalar( HSV_Value[1],HSV_Value[3],HSV_Value[5]);
@@ -331,10 +357,22 @@ void ImageProcessor::processImage()
 
     selectProcessingRegion(HSV_CaptureImage);
 
+
     //detect objects in image
     captureImage.copyTo(resultImage);
-    detectObject(HSV_CaptureImage, resultImage, BLUE_COLOR);
+    //detectObject(HSV_CaptureImage, resultImage, BLUE_COLOR);
 
+    for (uint8_t i = 0; i < 3; i++) {
+
+        minScalar = cv::Scalar(HSV_OBJECT[i][0], HSV_OBJECT[i][2], HSV_OBJECT[i][4]);
+        maxScalar = cv::Scalar(HSV_OBJECT[i][1], HSV_OBJECT[i][3], HSV_OBJECT[i][5]);
+
+        cv::inRange(objectImage[i], minScalar, maxScalar, objectImage[i]);
+        selectProcessingRegion(objectImage[i]);
+        
+        detectObject(objectImage[i], resultImage, BLUE_COLOR, nameObjectInfor[i]);
+    }
+    
     //Update object tracking infor
     updateTrackingInfor();
 
@@ -353,9 +391,8 @@ void ImageProcessor::processImage()
     }
 }
 
-void ImageProcessor::detectObject(cv::Mat input, cv::Mat output, cv::Scalar color)
+void ImageProcessor::detectObject(cv::Mat input, cv::Mat output, cv::Scalar color, QString TextDisplay)
 {
-
     //Find contour in image
     std::vector<std::vector<cv::Point>> contoursContainer;
     cv::findContours(input, contoursContainer, cv::RETR_TREE, cv::CHAIN_APPROX_SIMPLE);
@@ -394,8 +431,8 @@ void ImageProcessor::detectObject(cv::Mat input, cv::Mat output, cv::Scalar colo
         //     obWid = t;
         // }
 
-        if(h > 30 && w > 30){
-            findObjectRectangle(output, contoursContainer[i], color);
+        if(h > 100 && w > 100){
+            findObjectRectangle(output, contoursContainer[i], color, TextDisplay);
             visibleCounter += 1;
         }
     }
@@ -403,7 +440,7 @@ void ImageProcessor::detectObject(cv::Mat input, cv::Mat output, cv::Scalar colo
     obManager->visibleObjectNumber = visibleCounter;
 }
 
-void ImageProcessor::findObjectRectangle(cv::Mat &mat, std::vector<cv::Point> contour, cv::Scalar color)
+void ImageProcessor::findObjectRectangle(cv::Mat &mat, std::vector<cv::Point> contour, cv::Scalar color, QString TextDisplay)
 {
     //Get object positon from contour
     cv::RotatedRect minRect = cv::minAreaRect(cv::Mat(contour));
@@ -437,6 +474,8 @@ void ImageProcessor::findObjectRectangle(cv::Mat &mat, std::vector<cv::Point> co
 
     cv::putText(mat, "[" + std::to_string((int)xRealObject) + ", " + std::to_string((int)yRealObject) + "]", cv::Point(minRect.center.x - 40, minRect.center.y),
                 cv::FONT_HERSHEY_PLAIN, 1, WHITE_COLOR, 2);
+    cv::putText(mat, TextDisplay.toStdString(), cv::Point(minRect.center.x + minRect.size.width/2, minRect.center.y - minRect.size.height/2),
+        cv::FONT_HERSHEY_PLAIN, 2, WHITE_COLOR, 2);
 
 }
 

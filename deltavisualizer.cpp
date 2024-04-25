@@ -43,7 +43,7 @@ void DeltaVisualizer::changeXY(int x, int y)
 
     //draw a cicle express limit area
     p.setPen(QColor(255,255,102,170));
-    p.drawEllipse(width()/2 - 150, height()/2 - 150, 300, 300);
+    p.drawEllipse(width()/2 - 100, height()/2 - 100, 200, 200);
 
 
     p.end();

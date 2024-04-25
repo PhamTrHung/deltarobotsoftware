@@ -22,6 +22,10 @@ HSVWindow::~HSVWindow()
 
 void HSVWindow::initEvents()
 {
+    connect(ui->btnObject1, SIGNAL(clicked()), this, SLOT(addObject1()));
+    connect(ui->btnObject2, SIGNAL(clicked()), this, SLOT(addObject2()));
+    connect(ui->btnObject3, SIGNAL(clicked()), this, SLOT(addObject3()));
+
     for(int i=0; i<6; i++){
         connect(sliderWidget[i], SIGNAL(valueChanged(int)), this, SLOT(updateSliderValue()));
     }
@@ -42,6 +46,24 @@ void HSVWindow::initVariables()
     lblSliderValue[3] = ui->lblMaxS;
     lblSliderValue[4] = ui->lblMinV;
     lblSliderValue[5] = ui->lblMaxV;
+}
+
+void HSVWindow::addObject1()
+{
+    QString nameObject = ui->leObject1Name->text();
+    emit addObject(1, nameObject);
+}
+
+void HSVWindow::addObject2()
+{
+    QString nameObject = ui->leObject2Name->text();
+    emit addObject(2, nameObject);
+}
+
+void HSVWindow::addObject3()
+{
+    QString nameObject = ui->leObject3Name->text();
+    emit addObject(3, nameObject);
 }
 
 void HSVWindow::updateSliderValue()

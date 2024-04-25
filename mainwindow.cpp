@@ -239,9 +239,9 @@ void MainWindow::updateDeltaPositionFromGUI()
     yValue = QString::number(y);
     zValue = QString::number(z);
 
-    qDebug() << "X " << xValue;
+    /*qDebug() << "X " << xValue;
     qDebug() << "Y " << yValue;
-    qDebug() << "Z " << zValue;
+    qDebug() << "Z " << zValue;*/
 
     m_connection->sendData(QString("G01 X") + xValue + QString(" Y") + yValue + QString(" Z") + zValue);
 }

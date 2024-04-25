@@ -25,9 +25,14 @@ public:
 
 public slots:
     void updateSliderValue();
+    void addObject1();
+    void addObject2();
+    void addObject3();
 
 signals:
     void valueChanged(int minH, int maxH, int minS, int maxS, int minV, int maxV);
+    void addObject(int objectNumber, QString nameObject);
+
 
 private:
     Ui::HSVWindow *ui;

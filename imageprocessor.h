@@ -74,6 +74,7 @@ public slots:
     void openParameterPanel(bool);
 
     void setHSV(int minH, int maxH, int minS, int maxS, int minV, int maxV);
+    void getObjectsInfor(int numberObject, QString nameObject);
 
     void getCalibPoint(int, int);
     void getDistance(int);
@@ -93,8 +94,8 @@ signals:
 
 private:
     void processImage();
-    void detectObject(cv::Mat input, cv::Mat output, cv::Scalar color);
-    void findObjectRectangle(cv::Mat &mat, std::vector<cv::Point> contour, cv::Scalar color);
+    void detectObject(cv::Mat input, cv::Mat output, cv::Scalar color, QString TextDisplay);
+    void findObjectRectangle(cv::Mat &mat, std::vector<cv::Point> contour, cv::Scalar color, QString TextDisplay);
 
     void updateTrackingInfor();
     void updateObjectPositionOnConveyor();
@@ -118,6 +119,7 @@ private:
     cv::Mat resultImage;
     cv::Mat calibImage;
     cv::Mat originalImage;
+    cv::Mat objectImage[3];
 
     CameraWidget* lbResultImage;
 
@@ -125,6 +127,11 @@ private:
 
     HSVWindow* parameterPanel;
     int HSV_Value[6] = {0, 100, 0, 255, 0, 255};
+    int HSV_OBJECT[3][6] = { {0, 100, 0, 255, 0, 255},
+        {0, 100, 0, 255, 0, 255},
+        {0, 100, 0, 255, 0, 255} };
+    QString nameObjectInfor[3] = { "Object 1", "Object 2", "Object 3" };
+
 
     QLabel* lbTrackingObjectNumber;
     QLabel* lbVisibleObjectNumber;
