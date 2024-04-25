@@ -44,6 +44,8 @@ public slots:
     void updateZLableValue(int);
     void updateValueWhenClickGo();
     void updateDeltaPositionFromGUI();
+    void updateVelocity();
+    void updateAccel();
 
     void turnOnConveyor();
     void turnOffConveyor();
@@ -72,6 +74,8 @@ private:
 
     QWidget* bigCalibWindow;
     QVBoxLayout* cameraBox;
+
+    void calibXYZ_toRealValue(float& x, float& y, float& z);
 
 };
 #endif // MAINWINDOW_H

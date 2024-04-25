@@ -78,6 +78,8 @@ void MainWindow::initEvents()
     connect(ui->sldZAdjustion, SIGNAL(sliderReleased()), this, SLOT(updateDeltaPositionFromGUI()));
     connect(ui->sldZAdjustion, SIGNAL(valueChanged(int)), this, SLOT(updateZLableValue(int)));
     connect(ui->btnGo, SIGNAL(clicked(bool)), this, SLOT(updateValueWhenClickGo()));
+    connect(ui->leVeloc, SIGNAL(returnPressed()), this, SLOT(updateVelocity()));
+    connect(ui->leAccel, SIGNAL(returnPressed()), this, SLOT(updateAccel()));
 
     //control conveyor
     connect(ui->btnTurnOnConveyor, SIGNAL(clicked(bool)), this, SLOT(turnOnConveyor()));
@@ -152,6 +154,13 @@ void MainWindow::showStatusMessage(const QString &message)
     m_status->setText(message);
 }
 
+void MainWindow::calibXYZ_toRealValue(float& x, float& y, float& z)
+{
+    x *= 0.147;
+    y *= 0.147;
+    z = Z_HOME - (Z_HOME - z) * 0.1578947;
+}
+
 void MainWindow::connectionSettings()
 {
     m_connection->updatePortInfor();
@@ -176,6 +185,7 @@ void MainWindow::goToHome()
 
 void MainWindow::updateXYZLabelFrom2dControl(float x, float y, float z)
 {
+
     ui->lbX->setText(QString::number(x));
     ui->lbY->setText(QString::number(y));
     ui->lbZ->setText(QString::number(z));
@@ -198,9 +208,9 @@ void MainWindow::updateValueWhenClickGo()
     if(delta2DVisualizer->Z > -200){
         delta2DVisualizer->Z = -200;
         ui->leZValue->setText("-200");
-    }else if(delta2DVisualizer->Z < -500){
-        delta2DVisualizer->Z = -500;
-        ui->leZValue->setText("-500");
+    }else if(delta2DVisualizer->Z < -390){
+        delta2DVisualizer->Z = -390;
+        ui->leZValue->setText("-390");
     }
 
     ui->lbX->setText(QString::number(delta2DVisualizer->X));
@@ -215,7 +225,35 @@ void MainWindow::updateValueWhenClickGo()
 
 void MainWindow::updateDeltaPositionFromGUI()
 {
-    m_connection->sendData(QString("G01 X") + ui->lbX->text() + QString(" Y") + ui->lbY->text() + QString(" Z") + ui->lbZ->text() + QString(" F") + ui->leVeloc->text());
+    QString xValue = ui->lbX->text();
+    QString yValue = ui->lbY->text();
+    QString zValue = ui->lbZ->text();
+
+    float x = xValue.toFloat();
+    float y = yValue.toFloat();
+    float z = zValue.toFloat();
+
+    calibXYZ_toRealValue(x, y, z);
+
+    xValue = QString::number(x);
+    yValue = QString::number(y);
+    zValue = QString::number(z);
+
+    qDebug() << "X " << xValue;
+    qDebug() << "Y " << yValue;
+    qDebug() << "Z " << zValue;
+
+    m_connection->sendData(QString("G01 X") + xValue + QString(" Y") + yValue + QString(" Z") + zValue);
+}
+
+void MainWindow::updateVelocity()
+{
+    m_connection->sendData(QString("G01 F") + ui->leVeloc->text());
+}
+
+void MainWindow::updateAccel()
+{
+    m_connection->sendData(QString("M204 A") + ui->leAccel->text());
 }
 
 void MainWindow::turnOnConveyor()

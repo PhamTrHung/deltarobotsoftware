@@ -24,6 +24,12 @@ void DeltaVisualizer::setDivisionCombobox(QComboBox *d)
 
 void DeltaVisualizer::changeXY(int x, int y)
 {
+    if (x > X_MAX) x = X_MAX;
+    else if (x < X_MIN) x = X_MIN;
+
+    if (y > Y_MAX) y = Y_MAX;
+    else if (y < Y_MIN) y = Y_MIN;
+
     QPixmap pi = QPixmap(width(), height());
     pi.fill(QColor(0, 0, 0, 200));
 
@@ -111,7 +117,7 @@ void DeltaVisualizer::moveUp()
     float division = cbDivision->currentText().toFloat();
     Z += division;
 
-    if(Z > -200) Z = -200;
+    if(Z > Z_MAX) Z = Z_MAX;
 
     emit moved(X,Y,Z);
     emit finishMoving();
@@ -122,7 +128,7 @@ void DeltaVisualizer::moveDown()
     float division = cbDivision->currentText().toFloat();
     Z -= division;
 
-    if(Z < -500) Z = -500;
+    if(Z < Z_MIN) Z = Z_MIN;
 
     emit moved(X,Y,Z);
     emit finishMoving();
@@ -131,8 +137,9 @@ void DeltaVisualizer::moveDown()
 void DeltaVisualizer::moveForward()
 {
     float division = cbDivision->currentText().toFloat();
-    Y += division;
+    X += division;
 
+    if (X > X_MAX) X = X_MAX;
     changeXY(X,Y);
 
     emit moved(X,Y,Z);
@@ -142,9 +149,11 @@ void DeltaVisualizer::moveForward()
 void DeltaVisualizer::moveBackward()
 {
     float division = cbDivision->currentText().toFloat();
-    Y -= division;
+    X -= division;
 
+    if (X < X_MIN) X = X_MIN;
     changeXY(X,Y);
+
 
     emit moved(X,Y,Z);
     emit finishMoving();
@@ -153,8 +162,9 @@ void DeltaVisualizer::moveBackward()
 void DeltaVisualizer::moveLeft()
 {
     float division = cbDivision->currentText().toFloat();
-    X -= division;
+    Y += division;
 
+    if (Y > Y_MAX) Y = Y_MAX;
     changeXY(X,Y);
 
     emit moved(X,Y,Z);
@@ -164,8 +174,9 @@ void DeltaVisualizer::moveLeft()
 void DeltaVisualizer::moveRight()
 {
     float division = cbDivision->currentText().toFloat();
-    X += division;
+    Y -= division;
 
+    if (Y < Y_MIN) Y = Y_MIN;
     changeXY(X,Y);
 
     emit moved(X,Y,Z);

@@ -310,7 +310,7 @@ public:
         sldZAdjustion = new QSlider(groupBox_6);
         sldZAdjustion->setObjectName("sldZAdjustion");
         sldZAdjustion->setGeometry(QRect(9, 25, 22, 311));
-        sldZAdjustion->setMaximum(300);
+        sldZAdjustion->setMaximum(190);
         sldZAdjustion->setValue(0);
         sldZAdjustion->setOrientation(Qt::Vertical);
         sldZAdjustion->setInvertedAppearance(true);
@@ -357,6 +357,7 @@ public:
 "	border-radius:10px;\n"
 "	font: 700 12pt \"Segoe UI\";\n"
 "}"));
+        gbMotionControl->setAlignment(Qt::AlignCenter);
         gbMotionControl->setFlat(false);
         gbMotionControl->setCheckable(false);
         btnGo = new QPushButton(gbMotionControl);
@@ -482,6 +483,16 @@ public:
         groupBox_4 = new QGroupBox(gbMotionControl);
         groupBox_4->setObjectName("groupBox_4");
         groupBox_4->setGeometry(QRect(220, 70, 131, 141));
+        groupBox_4->setStyleSheet(QString::fromUtf8("QGroupBox\n"
+"{\n"
+"	border: 3px solid #ff1a1e;\n"
+"	font-size: 18px;\n"
+"    font-weight: bold;\n"
+"	color: rgb(255, 0, 0);\n"
+"	background-color:  rgb(0, 255, 255);\n"
+"}"));
+        groupBox_4->setAlignment(Qt::AlignCenter);
+        groupBox_4->setFlat(false);
         label_8 = new QLabel(groupBox_4);
         label_8->setObjectName("label_8");
         label_8->setGeometry(QRect(11, 107, 16, 21));
@@ -675,6 +686,7 @@ public:
 "	border-radius:10px;\n"
 "	font: 700 12pt \"Segoe UI\";\n"
 "}"));
+        groupBox_3->setAlignment(Qt::AlignCenter);
         line_3 = new QFrame(groupBox_3);
         line_3->setObjectName("line_3");
         line_3->setGeometry(QRect(100, 30, 16, 61));
@@ -916,7 +928,7 @@ public:
 
         btnStartProgram = new QPushButton(tab3);
         btnStartProgram->setObjectName("btnStartProgram");
-        btnStartProgram->setGeometry(QRect(740, 390, 81, 71));
+        btnStartProgram->setGeometry(QRect(740, 380, 81, 71));
         btnStartProgram->setAutoFillBackground(false);
         btnStartProgram->setStyleSheet(QString::fromUtf8("QPushButton\n"
 "{\n"
@@ -987,7 +999,7 @@ public:
 
         btnGCodeView = new QPushButton(tab3);
         btnGCodeView->setObjectName("btnGCodeView");
-        btnGCodeView->setGeometry(QRect(630, 430, 101, 31));
+        btnGCodeView->setGeometry(QRect(630, 420, 101, 31));
         QIcon icon7;
         icon7.addFile(QString::fromUtf8(":/icons/letter-g.png"), QSize(), QIcon::Normal, QIcon::Off);
         btnGCodeView->setIcon(icon7);
@@ -1084,7 +1096,7 @@ public:
 
         retranslateUi(MainWindow);
 
-        tabWidget->setCurrentIndex(0);
+        tabWidget->setCurrentIndex(1);
         tabWidget_2->setCurrentIndex(1);
 
 
@@ -1095,7 +1107,7 @@ public:
     {
         MainWindow->setWindowTitle(QCoreApplication::translate("MainWindow", "Delta Robot UI", nullptr));
         label_16->setText(QString());
-        tabWidget->setTabText(tabWidget->indexOf(tab_2), QCoreApplication::translate("MainWindow", "              Hello World                ", nullptr));
+        tabWidget->setTabText(tabWidget->indexOf(tab_2), QCoreApplication::translate("MainWindow", "        I am Delta, Hello !!!        ", nullptr));
         groupBox_2->setTitle(QCoreApplication::translate("MainWindow", "Conveyor", nullptr));
         btnSetSpeedConveyor->setText(QCoreApplication::translate("MainWindow", "Speed", nullptr));
         btnTurnOffConveyor->setText(QCoreApplication::translate("MainWindow", "Turn off", nullptr));
@@ -1140,7 +1152,7 @@ public:
         label_4->setText(QCoreApplication::translate("MainWindow", "Step (mm)", nullptr));
         label_5->setText(QCoreApplication::translate("MainWindow", "Veloc (mm/s)", nullptr));
         label_6->setText(QCoreApplication::translate("MainWindow", "Accel (mm/s2)", nullptr));
-        leVeloc->setText(QCoreApplication::translate("MainWindow", "200", nullptr));
+        leVeloc->setText(QCoreApplication::translate("MainWindow", "10", nullptr));
         leAccel->setText(QCoreApplication::translate("MainWindow", "1200", nullptr));
         btnHoming->setText(QString());
         gbConnection->setTitle(QCoreApplication::translate("MainWindow", "Connection", nullptr));
@@ -1179,7 +1191,13 @@ public:
         label_18->setText(QCoreApplication::translate("MainWindow", "X", nullptr));
         label_19->setText(QCoreApplication::translate("MainWindow", "Y", nullptr));
         btnTransform->setText(QCoreApplication::translate("MainWindow", "Transform", nullptr));
+#if QT_CONFIG(tooltip)
+        btnSaveSettings->setToolTip(QCoreApplication::translate("MainWindow", "Save Setting", nullptr));
+#endif // QT_CONFIG(tooltip)
         btnSaveSettings->setText(QString());
+#if QT_CONFIG(tooltip)
+        btnLoadSettings->setToolTip(QCoreApplication::translate("MainWindow", "Load Setting", nullptr));
+#endif // QT_CONFIG(tooltip)
         btnLoadSettings->setText(QString());
         grpCam->setTitle(QString());
         tabWidget->setTabText(tabWidget->indexOf(tab3), QCoreApplication::translate("MainWindow", "            Image Processing           ", nullptr));

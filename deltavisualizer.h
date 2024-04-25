@@ -10,6 +10,17 @@
 
 #define MOVING_BASE_SIZE 50
 
+//#define Z_CALIB 0.03
+
+#define X_MAX 100
+#define X_MIN -100
+#define Y_MAX 100
+#define Y_MIN -100
+#define Z_MAX -200
+#define Z_MIN -390
+#define Z_HOME -200
+
+
 class DeltaVisualizer : public QLabel
 {
     Q_OBJECT
@@ -26,7 +37,7 @@ public:
     float XHome = 0;
     float YHome = 0;
     float ZHome = -200;
-    float VDefault = 200;
+    float VDefault = 10;
     float ADefault = 1200;
 
     float X = XHome;
@@ -69,6 +80,8 @@ private:
     float rfPara;
     float rePara;
     float ePara;
+
+    
 
 };
 
