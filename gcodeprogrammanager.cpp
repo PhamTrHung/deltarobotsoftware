@@ -27,7 +27,7 @@ GcodeProgramManager::GcodeProgramManager(QTextEdit *gcodeArea, QPushButton *btnE
     updateSystemVariable("#X", 0);
     updateSystemVariable("#Y", 0);
     updateSystemVariable("#Z", 0);
-    updateSystemVariable("#F", 200);
+    updateSystemVariable("#F", 10);
     updateSystemVariable("#A", 1200);
 
     connect(deltaSerialPort, SIGNAL(deltaRespondGcodeDone()), this, SLOT(transmitNextGcode()));
@@ -191,7 +191,7 @@ void GcodeProgramManager::saveGcodeIntoFile(QString fileName)
 
 float GcodeProgramManager::getVariableValue(QString name)
 {
-    if(name == "") return NULL_NUMBER;
+    if(name == "NULL") return NULL_NUMBER;
 
     foreach(GcodeVariable var, gcodeVariables){
         if(var.name == name){
@@ -426,10 +426,20 @@ bool GcodeProgramManager::findExeGcodeAndTransmit()
             return false;
         }
 
+        //Control conveyor
+        if (valuePairs[i] == "M301") {
+            emit conveyorStop();
+        }
+
+        if (valuePairs[i] == "M302") {
+            emit conveyorRun();
+        }
+
         //Complete GCode
         if(valuePairs[i] == "M30"){
             gcodeList.clear();
             btnExecuteGcodes->click();
+            return true;
         }
 
     }

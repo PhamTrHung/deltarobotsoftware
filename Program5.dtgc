@@ -1,0 +1,36 @@
+N0 M98 PclearObjects
+N5 G28
+
+;variable
+N10 G01 X0 Y0 Z-300
+
+;wait 10 ms
+N15 G04 P10
+
+;check
+N20 IF [#O1_Y == NULL] THEN GOTO 15
+
+;
+N25 [#O1_T]
+N30 IF [#O1_T == 1] THEN GOTO 50
+N35 IF [#O1_T == 2] THEN GOTO 60
+N40 IF [#O1_T == 3] THEN GOTO 70
+N45 GOTO 80
+
+;
+N50 G01 X1 Y1 Z1
+N55 GOTO 80
+
+;
+N60 G01 X2 Y2 Z2
+N65 GOTO 80
+
+;
+N70 G01 X3 Y3 Z3
+N75 GOTO 80
+
+;
+N80 M98 PdeleteFirstObject
+
+;
+N85 GOTO 15

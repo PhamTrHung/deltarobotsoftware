@@ -207,6 +207,9 @@ void CameraWidget::mouseReleaseEvent(QMouseEvent *event)
     emit finishSelectedTransformPoints(transformPoints[0], transformPoints[1], transformPoints[2], transformPoints[3]);
     emit finishSelectCalibPoint(mPoint.x(), mPoint.y());
 
+    //qDebug() << "x in cam: " << mPoint.x();
+    //qDebug() << "y in cam" << mPoint.y();
+
     mousePressed = false;
     update();
 }

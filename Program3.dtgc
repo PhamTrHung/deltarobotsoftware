@@ -1,0 +1,73 @@
+
+;Test pick and place with pausing conveyor mode
+N0 M98 PclearObjects
+;N5 G28
+
+;Set acceleration
+N10 M204 A1200
+
+;Set speed
+N15 G01 F20
+N20 G01 X0 Y0 Z-300
+
+;N25 M302
+
+;
+N25 #Counter = 0
+N30 #Counter2 = 0
+N35 #Offset = 20
+
+;Delay 10 ms
+N40 G04 P10
+
+;If there is no object, go back and wait
+N45 IF [#O1_Y == NULL] THEN GOTO 40
+
+;
+N50 G04 P10
+
+;
+N55 IF [[#O1_Y < 100] AND [#O1_Y > -50]] THEN GOTO 65
+
+;
+N60 GOTO 50
+
+;
+
+;
+N65 G04 P10
+N70 IF [#O1_Y > [#Y + #Offset]] THEN GOTO 65
+
+;Stop conveyor
+N75 M301
+
+;Move
+N80 G01 X[#O1_X] Y[#O1_Y - 10] Z-300
+
+;Open vacuum 
+N85 M05
+
+;Pick up
+N90 G01 Z-350
+N95 G01 Z-300
+
+;Drop
+N100 #XOrder = -70
+N105 #YOrder = 0
+N110 #ZOrder = -300
+
+;
+N115 G01 X[#XOrder + 5] Y[#YOrder] Z[#ZOrder]
+
+;
+N120 M04
+N125 G04 P100
+N130 G01 X0 Y0 Z-300
+
+;
+N135 M98 PdeleteFirstObject
+
+;
+
+;N135 GOTO 90
+N140 M30

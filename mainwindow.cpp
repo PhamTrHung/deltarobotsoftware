@@ -37,7 +37,9 @@ void MainWindow::initVariables()
     //Image processor
     deltaImageProcessor = new ImageProcessor(this);
     deltaImageProcessor->setImageScreen(ui->lblCam);
-    deltaImageProcessor->setObjectInforLabelWidget(ui->lbTrackingObjectNumber, ui->lbVisibleObjectNumber);
+    deltaImageProcessor->setObjectInforLabelWidget(ui->lbTrackingObjectNumber, ui->lbVisibleObjectNumber, 
+        ui->lblNameObj1, ui->lblNameObj2, ui->lblNameObj3, 
+        ui->lblNumberObj1, ui->lblNumberObj2, ui->lblNumberObj3);
     deltaImageProcessor->setMeasureParameterPointer(ui->leXCoordinate, ui->leYCoordinate, ui->leRealDistance);
 
     //Object table
@@ -64,6 +66,7 @@ void MainWindow::initEvents()
     connect(ui->btnSettingConnect, SIGNAL(clicked(bool)), this, SLOT(connectionSettings()));
     connect(ui->btnConnect, SIGNAL(clicked(bool)), this, SLOT(triggerConnect()));
     connect(ui->btnHoming, SIGNAL(clicked(bool)), this, SLOT(goToHome()));
+    connect(ui->btnSafePosition, SIGNAL(clicked()), this, SLOT(goToSafePosition()));
 
     connect(ui->btnForward, SIGNAL(clicked(bool)), delta2DVisualizer, SLOT(moveForward()));
     connect(ui->btnBackward, SIGNAL(clicked(bool)), delta2DVisualizer, SLOT(moveBackward()));
@@ -92,6 +95,14 @@ void MainWindow::initEvents()
     //connect(ui->btnFilter, SIGNAL(clicked(bool)), deltaImageProcessor, SLOT(openParameterPanel()));
     connect(ui->cmbModeDisplay, SIGNAL(currentTextChanged(QString)), this, SLOT(changeModeDisplay()));
     connect(ui->btnClearAllObject, SIGNAL(clicked(bool)), deltaImageProcessor->obManager, SLOT(removeAllDetectObjects()));
+    connect(deltaImageProcessor->obManager, SIGNAL(newUpdateObjectPositon(QString, float)), deltaGcodeManager, SLOT(updateSystemVariable(QString, float)));
+
+    //Gcode manager
+    connect(deltaGcodeManager, SIGNAL(deleteFirstObject()), deltaImageProcessor->obManager, SLOT(removeOldestObjects()));
+    connect(deltaGcodeManager, SIGNAL(outOfObjectVariable()), deltaImageProcessor->obManager, SLOT(removeOldestObjects()));
+    connect(deltaGcodeManager, SIGNAL(deleteAllObjects()), deltaImageProcessor->obManager, SLOT(removeAllDetectObjects()));
+    connect(deltaGcodeManager, SIGNAL(conveyorStop()), this, SLOT(turnOffConveyor()));
+    connect(deltaGcodeManager, SIGNAL(conveyorRun()), this, SLOT(setSpeedForConveyor()));
 
     //Vacuum
     connect(ui->btnVacuum, SIGNAL(clicked()), this, SLOT(activateVacuum()));
@@ -183,6 +194,30 @@ void MainWindow::goToHome()
     }
 }
 
+void MainWindow::goToSafePosition()
+{
+    float xSafe = 0;
+    float ySafe = 0;
+    float zSafe = -280;
+
+    delta2DVisualizer->X = xSafe;
+    delta2DVisualizer->Y = ySafe;
+    delta2DVisualizer->Z = zSafe;
+
+    ui->leXValue->setText(QString::number(delta2DVisualizer->X));
+    ui->leYValue->setText(QString::number(delta2DVisualizer->Y));
+    ui->leZValue->setText(QString::number(delta2DVisualizer->Z));
+
+    ui->lbX->setText(QString::number(delta2DVisualizer->X));
+    ui->lbY->setText(QString::number(delta2DVisualizer->Y));
+    ui->lbZ->setText(QString::number(delta2DVisualizer->Z));
+
+    ui->sldZAdjustion->setValue(delta2DVisualizer->ZHome - delta2DVisualizer->Z);
+    delta2DVisualizer->changeXY(delta2DVisualizer->X, delta2DVisualizer->Y);
+
+    updateDeltaPositionFromGUI();
+}
+
 void MainWindow::updateXYZLabelFrom2dControl(float x, float y, float z)
 {
 
@@ -229,7 +264,7 @@ void MainWindow::updateDeltaPositionFromGUI()
     QString yValue = ui->lbY->text();
     QString zValue = ui->lbZ->text();
 
-    float x = xValue.toFloat();
+    /*float x = xValue.toFloat();
     float y = yValue.toFloat();
     float z = zValue.toFloat();
 
@@ -237,7 +272,7 @@ void MainWindow::updateDeltaPositionFromGUI()
 
     xValue = QString::number(x);
     yValue = QString::number(y);
-    zValue = QString::number(z);
+    zValue = QString::number(z);*/
 
     /*qDebug() << "X " << xValue;
     qDebug() << "Y " << yValue;
@@ -258,17 +293,21 @@ void MainWindow::updateAccel()
 
 void MainWindow::turnOnConveyor()
 {
+    deltaImageProcessor->setConveyorSpeed(80);
     m_connection->sendData(QString("M300"));
 }
 
 void MainWindow::turnOffConveyor()
 {
+    deltaImageProcessor->setConveyorSpeed(0);
     m_connection->sendData(QString("M301"));
 }
 
 void MainWindow::setSpeedForConveyor()
 {
+    deltaImageProcessor->setConveyorSpeed(ui->leSpeedConveyor->text().toInt());
     m_connection->sendData(QString("M302 ") + ui->leSpeedConveyor->text());
+    //qDebug() << QString("M302 ") + ui->leSpeedConveyor->text();
 }
 
 void MainWindow::updateInfor_LoadCamera()
@@ -342,7 +381,7 @@ void MainWindow::activateVacuum()
     QPushButton *btnvac = qobject_cast<QPushButton*>(sender());
 
     if(btnvac->isChecked()){
-        //Turn on conveyor
+        //Turn on vacuum
         m_connection->sendData("M05");
     }else{
         //Turn off conveyor

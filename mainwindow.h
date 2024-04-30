@@ -11,6 +11,7 @@
 #include "gcodewindow.h"
 #include "gcodeprogrammanager.h"
 
+
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class MainWindow;
@@ -39,6 +40,7 @@ public slots:
     void connectionSettings();
     void triggerConnect();
     void goToHome();
+    void goToSafePosition();
 
     void updateXYZLabelFrom2dControl(float, float, float);
     void updateZLableValue(int);

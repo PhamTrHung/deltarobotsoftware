@@ -284,9 +284,16 @@
     <ResourceCompile Include="DeltaRobotSoftware.rc" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="icons\add.png" />
+    <Image Include="icons\arrow-down.png" />
+    <Image Include="icons\arrow-up.png" />
+    <Image Include="icons\arrowUp2.png" />
     <Image Include="icons\file.png" />
     <Image Include="icons\house.png" />
+    <Image Include="icons\minus.png" />
+    <Image Include="icons\ROBOT AT VNUA 3.png" />
     <Image Include="icons\save.png" />
+    <Image Include="icons\shield.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <Import Project="$(QtMsBuild)\qt.targets" Condition="Exists('$(QtMsBuild)\qt.targets')" />

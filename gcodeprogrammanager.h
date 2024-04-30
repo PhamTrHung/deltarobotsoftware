@@ -53,6 +53,9 @@ signals:
     void justUpdateVariable(QList<GcodeVariable> gcodevariables);
     void moveToNewPosition(float x, float y, float z, float f, float a);
 
+    void conveyorStop();
+    void conveyorRun();
+
 private:
     QList<QString> gcodeList;
     QList<GcodeVariable> gcodeVariables;

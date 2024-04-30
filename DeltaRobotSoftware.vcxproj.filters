@@ -227,5 +227,26 @@
     <Image Include="icons\save.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="icons\add.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="icons\minus.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="icons\arrow-down.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="icons\arrowUp2.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="icons\ROBOT AT VNUA 3.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="icons\shield.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="icons\arrow-up.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

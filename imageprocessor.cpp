@@ -20,6 +20,7 @@ ImageProcessor::ImageProcessor(QWidget *parent)
 
     obManager = new ObjectManager(parent);
 
+    timerTool.start();
 }
 
 ImageProcessor::~ImageProcessor()
@@ -60,10 +61,17 @@ void ImageProcessor::setImageScreen(CameraWidget *screen)
     lbResultImage = screen;
 }
 
-void ImageProcessor::setObjectInforLabelWidget(QLabel *lbTracking, QLabel *lbVisible)
+void ImageProcessor::setObjectInforLabelWidget(QLabel* lbTracking, QLabel* lbVisible, QLabel* obj1Name, QLabel* obj2Name,
+    QLabel* obj3Name, QLabel* obj1Number, QLabel* obj2Number, QLabel* obj3Number)
 {
     lbTrackingObjectNumber = lbTracking;
     lbVisibleObjectNumber = lbVisible;
+    lbObject1Name = obj1Name;
+    lbObject2Name = obj2Name;
+    lbObject3Name = obj3Name;
+    lbObject1Number = obj1Number;
+    lbObject2Number = obj2Number;
+    lbObject3Number = obj3Number;
 }
 
 void ImageProcessor::setMeasureParameterPointer(QLineEdit *xCoor, QLineEdit *yCoor, QLineEdit *distance)
@@ -262,9 +270,9 @@ void ImageProcessor::getCalibPoint(int x, int y)
     //qDebug() << "xreal = " << xRealCalibPoint;
     //qDebug() << "yreal = " << yRealCalibPoint;
 
-    // X axis up
+    // X axis
     // góc giữa hệ tọa độ vật so với hệ tọa độ robot delta
-    float theta = M_PI_2;
+    float theta = 0;
 
     cv::Mat rotateMatrix = (cv::Mat_<float>(3, 3) << cos(theta), -sin(theta), 0,
                                                      sin(theta), cos(theta), 0,
@@ -275,7 +283,7 @@ void ImageProcessor::getCalibPoint(int x, int y)
                                                     0, 0, 1);
     //qDebug() << "PnRRatio = " << PnRRatio;
     
-    cv::Mat scaleRotateMatrix = rotateMatrix * scaleMatrix;
+    cv::Mat scaleRotateMatrix = scaleMatrix * rotateMatrix ;
     //qDebug() << scaleRotateMatrix.at<float>(2, 2);
 
     // x' = m11 * x + m21 * y + dx   --> dx = x' - (m11 * x + m21 * y)
@@ -305,6 +313,8 @@ void ImageProcessor::getDistance(int distance)
 
     PnRRatio = processDistance / realDistance;
     DnRRatio = (float)distance / realDistance;
+
+    
 }
 
 void ImageProcessor::getProcessArea(QRect processArea)
@@ -325,8 +335,10 @@ void ImageProcessor::getCalibLine(QPoint p1, QPoint p2)
     DCalibLine.setP2(p2);
 
     QLineF line;
-    line.setP1(QPointF(p1.x() * DnPWRatio, p1.y() * DnPHRatio));
-    line.setP2(QPointF(p2.x() * DnPWRatio, p2.y() * DnPHRatio));
+    line.setP1(QPointF(p1.x() / DnPWRatio, p1.y() / DnPHRatio));
+    line.setP2(QPointF(p2.x() / DnPWRatio, p2.y() / DnPHRatio));
+    //qDebug() << "Line p1: x " << line.p1().x() << " y " << line.p1().y();
+    //qDebug() << "Line p2: x " << line.p2().x() << " y " << line.p2().y();
     //qDebug() << "real distance process = " << line.length();
     processDistanceValue = line.length();
 }
@@ -360,7 +372,10 @@ void ImageProcessor::processImage()
 
     //detect objects in image
     captureImage.copyTo(resultImage);
-    //detectObject(HSV_CaptureImage, resultImage, BLUE_COLOR);
+    //detectObject(HSV_CaptureImage, resultImage, BLUE_COLOR, "Blue");
+
+    //reset visiableCounter
+    visibleCounter = 0;
 
     for (uint8_t i = 0; i < 3; i++) {
 
@@ -370,7 +385,7 @@ void ImageProcessor::processImage()
         cv::inRange(objectImage[i], minScalar, maxScalar, objectImage[i]);
         selectProcessingRegion(objectImage[i]);
         
-        detectObject(objectImage[i], resultImage, BLUE_COLOR, nameObjectInfor[i]);
+        detectObject(objectImage[i], resultImage, BLUE_COLOR, nameObjectInfor[i], i);
     }
     
     //Update object tracking infor
@@ -391,7 +406,7 @@ void ImageProcessor::processImage()
     }
 }
 
-void ImageProcessor::detectObject(cv::Mat input, cv::Mat output, cv::Scalar color, QString TextDisplay)
+void ImageProcessor::detectObject(cv::Mat input, cv::Mat output, cv::Scalar color, QString TextDisplay, int objNum)
 {
     //Find contour in image
     std::vector<std::vector<cv::Point>> contoursContainer;
@@ -405,7 +420,6 @@ void ImageProcessor::detectObject(cv::Mat input, cv::Mat output, cv::Scalar colo
 
     //Calculate size of contour
 
-    int visibleCounter = 0;
 
     for(int i=0; i<contoursContainer.size(); i++){
         cv::RotatedRect minRect = cv::minAreaRect(cv::Mat(contoursContainer[i]));
@@ -432,7 +446,7 @@ void ImageProcessor::detectObject(cv::Mat input, cv::Mat output, cv::Scalar colo
         // }
 
         if(h > 100 && w > 100){
-            findObjectRectangle(output, contoursContainer[i], color, TextDisplay);
+            findObjectRectangle(output, contoursContainer[i], color, TextDisplay, objNum);
             visibleCounter += 1;
         }
     }
@@ -440,7 +454,7 @@ void ImageProcessor::detectObject(cv::Mat input, cv::Mat output, cv::Scalar colo
     obManager->visibleObjectNumber = visibleCounter;
 }
 
-void ImageProcessor::findObjectRectangle(cv::Mat &mat, std::vector<cv::Point> contour, cv::Scalar color, QString TextDisplay)
+void ImageProcessor::findObjectRectangle(cv::Mat &mat, std::vector<cv::Point> contour, cv::Scalar color, QString TextDisplay, int objNum)
 {
     //Get object positon from contour
     cv::RotatedRect minRect = cv::minAreaRect(cv::Mat(contour));
@@ -456,11 +470,17 @@ void ImageProcessor::findObjectRectangle(cv::Mat &mat, std::vector<cv::Point> co
     int xRealObject = 0;
     int yRealObject = 0;
 
-    cv::Mat PPoint = (cv::Mat_<float>(3,1) << minRect.center.x / DnPRatio, minRect.center.y / DnPRatio, 1);
+    cv::Mat PPoint = (cv::Mat_<float>(3,1) << minRect.center.x, minRect.center.y, 1);
+    /*cv::putText(mat, "[" + std::to_string((int)PPoint.at<float>(0,0)) + ", " + std::to_string((int)PPoint.at<float>(1, 0)) + "]", cv::Point(minRect.center.x + minRect.size.width/2, minRect.center.y - minRect.size.height / 2),
+        cv::FONT_HERSHEY_PLAIN, 1, WHITE_COLOR, 2);*/
+
     cv::Mat RPoint = P2RMatrix * PPoint;
 
     xRealObject = RPoint.at<float>(0,0);
     yRealObject = RPoint.at<float>(1,0);
+
+    //qDebug() << "x real object" << xRealObject;
+    //qDebug() << "y real object" << yRealObject;
 
     cv::RotatedRect realObject = minRect;
 
@@ -469,13 +489,14 @@ void ImageProcessor::findObjectRectangle(cv::Mat &mat, std::vector<cv::Point> co
     realObject.size.height = minRect.size.height / PnRRatio;
     realObject.size.width = minRect.size.width / PnRRatio;
 
-    obManager->addNewObject(realObject);
+    obManager->addNewObject(realObject, objNum);
 
 
     cv::putText(mat, "[" + std::to_string((int)xRealObject) + ", " + std::to_string((int)yRealObject) + "]", cv::Point(minRect.center.x - 40, minRect.center.y),
                 cv::FONT_HERSHEY_PLAIN, 1, WHITE_COLOR, 2);
     cv::putText(mat, TextDisplay.toStdString(), cv::Point(minRect.center.x + minRect.size.width/2, minRect.center.y - minRect.size.height/2),
         cv::FONT_HERSHEY_PLAIN, 2, WHITE_COLOR, 2);
+    //qDebug() << "Angle: " << minRect.angle;
 
 }
 
@@ -483,11 +504,27 @@ void ImageProcessor::updateTrackingInfor()
 {
     lbTrackingObjectNumber->setText(QString::number(obManager->objectContainer.size()));
     lbVisibleObjectNumber->setText(QString::number(obManager->visibleObjectNumber));
+    lbObject1Name->setText(nameObjectInfor[0]);
+    lbObject2Name->setText(nameObjectInfor[1]);
+    lbObject3Name->setText(nameObjectInfor[2]);
+    lbObject1Number->setText(QString::number(obManager->objectNumber1));
+    lbObject2Number->setText(QString::number(obManager->objectNumber2));
+    lbObject3Number->setText(QString::number(obManager->objectNumber3));
 }
 
 void ImageProcessor::updateObjectPositionOnConveyor()
 {
+    float distance = conveyorSpd * ((float)timerTool.elapsed() / 1000);
+    timerTool.restart();
+
+    obManager->updateNewPositionObjects(distance);
+
     emit objectPositionChanged(obManager->objectContainer);
+}
+
+void ImageProcessor::setConveyorSpeed(int vel)
+{
+    conveyorSpd = vel;
 }
 
 void ImageProcessor::makeBrightProcessRegion(cv::Mat resultMats)
@@ -636,6 +673,9 @@ void ImageProcessor::updateRatios()
 
     DnPWRatio = (float)lbResultImage->width() / camera->get(cv::CAP_PROP_FRAME_WIDTH);
     DnPHRatio = (float)lbResultImage->height() / camera->get(cv::CAP_PROP_FRAME_HEIGHT);
+
+    //qDebug() << "DnPWRatio = " << DnPWRatio;
+    //qDebug() << "DnPHRatio = " << DnPHRatio;
     
     cameraRatio = (float)camera->get(cv::CAP_PROP_FRAME_WIDTH)/camera->get(cv::CAP_PROP_FRAME_HEIGHT);
 }

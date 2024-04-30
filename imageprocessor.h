@@ -9,6 +9,7 @@
 #include <opencv2/imgproc.hpp>
 #include <QPushButton>
 #include <QTimer>
+#include <qelapsedtimer.h>
 #include <QLineEdit>
 #include <qgenericmatrix.h>
 
@@ -43,9 +44,11 @@ public:
     void setImageScreen(CameraWidget* screen);
 
     ObjectManager *obManager;
-    void setObjectInforLabelWidget(QLabel* lbTracking, QLabel* lbVisible);
+    void setObjectInforLabelWidget(QLabel* lbTracking, QLabel* lbVisible, QLabel* obj1Name, QLabel* obj2Name,
+        QLabel* obj3Name, QLabel* obj1Number, QLabel* obj2Number, QLabel* obj3Number);
     
     void setMeasureParameterPointer(QLineEdit* xCoor, QLineEdit* yCoor, QLineEdit* distance);
+    void setConveyorSpeed(int vel);
 
     void displayAdditionalInfor();
 
@@ -94,11 +97,12 @@ signals:
 
 private:
     void processImage();
-    void detectObject(cv::Mat input, cv::Mat output, cv::Scalar color, QString TextDisplay);
-    void findObjectRectangle(cv::Mat &mat, std::vector<cv::Point> contour, cv::Scalar color, QString TextDisplay);
+    void detectObject(cv::Mat input, cv::Mat output, cv::Scalar color, QString TextDisplay, int objNum);
+    void findObjectRectangle(cv::Mat &mat, std::vector<cv::Point> contour, cv::Scalar color, QString TextDisplay, int objNum);
 
     void updateTrackingInfor();
     void updateObjectPositionOnConveyor();
+    
 
     void makeBrightProcessRegion(cv::Mat resultMats);
     void selectProcessingRegion(cv::Mat proImg);
@@ -113,6 +117,8 @@ private:
 
     void transformPerspective(cv::Mat inputMat, std::vector<cv::Point> points, cv::Mat outputMat);
 
+    int conveyorSpd{ 0 };
+
     QTimer* updateScreenTimer;
     cv::Mat captureImage;
     cv::Mat HSV_CaptureImage;
@@ -121,20 +127,28 @@ private:
     cv::Mat originalImage;
     cv::Mat objectImage[3];
 
+    QElapsedTimer timerTool;
+
     CameraWidget* lbResultImage;
 
     MainWindow* mParent;
 
     HSVWindow* parameterPanel;
-    int HSV_Value[6] = {0, 100, 0, 255, 0, 255};
-    int HSV_OBJECT[3][6] = { {0, 100, 0, 255, 0, 255},
-        {0, 100, 0, 255, 0, 255},
-        {0, 100, 0, 255, 0, 255} };
+    int HSV_Value[6] = { 0, 100, 0, 255, 0, 255 };
+    int HSV_OBJECT[3][6] = { {0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0} };
     QString nameObjectInfor[3] = { "Object 1", "Object 2", "Object 3" };
 
 
     QLabel* lbTrackingObjectNumber;
     QLabel* lbVisibleObjectNumber;
+    QLabel* lbObject1Name;
+    QLabel* lbObject2Name;
+    QLabel* lbObject3Name;
+    QLabel* lbObject1Number;
+    QLabel* lbObject2Number;
+    QLabel* lbObject3Number;
 
     QLineEdit* leDistance = nullptr;
     QLineEdit* leXCoor = nullptr;
@@ -161,6 +175,8 @@ private:
 
     bool isPerspectiveMode = false;
     float processDistanceValue = 0;
+
+    int visibleCounter{ 0 };
 };
 
 #endif // IMAGEPROCESSOR_H

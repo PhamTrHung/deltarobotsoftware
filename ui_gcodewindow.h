@@ -175,7 +175,7 @@ public:
         lbX->setText(QCoreApplication::translate("GCodeWindow", "X", nullptr));
         lbY->setText(QCoreApplication::translate("GCodeWindow", "Y", nullptr));
         lbZ->setText(QCoreApplication::translate("GCodeWindow", "Z", nullptr));
-        lbV->setText(QCoreApplication::translate("GCodeWindow", "V", nullptr));
+        lbV->setText(QCoreApplication::translate("GCodeWindow", "F", nullptr));
         lbA->setText(QCoreApplication::translate("GCodeWindow", "A", nullptr));
         cmbProgramList->setItemText(0, QString());
         cmbProgramList->setItemText(1, QCoreApplication::translate("GCodeWindow", "Program 1", nullptr));
