@@ -57,7 +57,7 @@ void MainWindow::initVariables()
     cameraBox = new QVBoxLayout(ui->lblCam->parentWidget());
     cameraBox->setGeometry(QRect(0,0,100,100));
     cameraBox->addWidget(ui->lblCam);
-    
+
 }
 
 void MainWindow::initEvents()
@@ -129,7 +129,7 @@ void MainWindow::initEvents()
     connect(ui->lblCam, SIGNAL(finishSelectCalibLine(QPoint,QPoint)), deltaImageProcessor, SLOT(getCalibLine(QPoint,QPoint)));
     connect(ui->lblCam, SIGNAL(finishSelectCalibPoint(int,int)), deltaImageProcessor, SLOT(getCalibPoint(int,int)));
     connect(ui->lblCam, SIGNAL(finishSelectProcessArea(QRect)), deltaImageProcessor, SLOT(getProcessArea(QRect)));
-    connect(ui->lblCam, SIGNAL(finishSelectedTransformPoints(QPoint, QPoint, QPoint, QPoint)), deltaImageProcessor, SLOT(getPerspectivePoints(QPoint, QPoint, QPoint, QPoint)));
+    //connect(ui->lblCam, SIGNAL(finishSelectedTransformPoints(QPoint, QPoint, QPoint, QPoint)), deltaImageProcessor, SLOT(getPerspectivePoints(QPoint, QPoint, QPoint, QPoint)));
     connect(ui->btnTransform, SIGNAL(clicked(bool)), this, SLOT(showBigCalibWindow()));
     connect(ui->lblCam, SIGNAL(sizeChange()), deltaImageProcessor, SLOT(updateRatios()));
     connect(ui->btnSaveSettings, SIGNAL(clicked(bool)), deltaImageProcessor, SLOT(saveSetting()));
@@ -167,8 +167,8 @@ void MainWindow::showStatusMessage(const QString &message)
 
 void MainWindow::calibXYZ_toRealValue(float& x, float& y, float& z)
 {
-    x *= 0.147;
-    y *= 0.147;
+    x *= 0.147f;
+    y *= 0.147f;
     z = Z_HOME - (Z_HOME - z) * 0.1578947;
 }
 
@@ -422,12 +422,12 @@ void MainWindow::showBigCalibWindow()
         ui->lblCam->setParent(bigCalibWindow);
         bigCalibWindow->show();
         ui->lblCam->changeSize(800, 600);
-        deltaImageProcessor->turnOffPerspectiveMode();
+        //deltaImageProcessor->turnOffPerspectiveMode();
         return;
     }
     
     if (!btn->isChecked()) {
-        deltaImageProcessor->turnOnPerspectiveMode();
+        //deltaImageProcessor->turnOnPerspectiveMode();
         ui->lblCam->changeSize(500, 300); //Bắt buộc change size trước khi addWidget, nếu không sẽ sai tỉ lệ
         //Do addWidget có cơ chế tự động thay đổi widget cho vừa với layout, ...
         cameraBox->addWidget(ui->lblCam);

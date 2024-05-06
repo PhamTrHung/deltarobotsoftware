@@ -69,7 +69,7 @@ background-color: rgb(248, 248, 248);
        <enum>QTabWidget::Triangular</enum>
       </property>
       <property name="currentIndex">
-       <number>2</number>
+       <number>1</number>
       </property>
       <property name="elideMode">
        <enum>Qt::ElideNone</enum>
@@ -296,7 +296,7 @@ background-color:none;
           <string/>
          </property>
          <property name="text">
-          <string>200</string>
+          <string>80</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -307,18 +307,27 @@ background-color:none;
         </widget>
        </widget>
        <widget class="QTabWidget" name="tabWidget_2">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
         <property name="geometry">
          <rect>
           <x>390</x>
           <y>30</y>
-          <width>431</width>
+          <width>441</width>
           <height>441</height>
          </rect>
         </property>
-        <property name="currentIndex">
-         <number>1</number>
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
         </property>
-        <widget class="QWidget" name="tab">
+        <property name="currentIndex">
+         <number>0</number>
+        </property>
+        <widget class="QWidget" name="t3d">
          <attribute name="title">
           <string>3D</string>
          </attribute>
@@ -332,7 +341,7 @@ background-color:none;
            <rect>
             <x>10</x>
             <y>10</y>
-            <width>411</width>
+            <width>421</width>
             <height>391</height>
            </rect>
           </property>
@@ -408,7 +417,7 @@ QSlider::sub-page:vertical{
            </property>
            <property name="geometry">
             <rect>
-             <x>50</x>
+             <x>40</x>
              <y>30</y>
              <width>370</width>
              <height>355</height>
@@ -2227,7 +2236,7 @@ QPushButton:pressed
 }</string>
          </property>
          <property name="text">
-          <string>Tracking</string>
+          <string>Sum</string>
          </property>
         </widget>
        </widget>

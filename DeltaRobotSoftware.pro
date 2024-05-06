@@ -1,4 +1,4 @@
-QT       += core gui serialport
+QT       += core gui serialport widgets opengl openglwidgets
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -49,7 +49,11 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 RESOURCES += \
     img.qrc
 
+
+LIBS += -lopengl32 -lglu32
+
 DISTFILES +=
+
 
 win32:CONFIG(release, debug|release): LIBS += -LD:/ProgramFile/opencv/opencv/build/x64/vc16/lib/ -lopencv_world490
 else:win32:CONFIG(debug, debug|release): LIBS += -LD:/ProgramFile/opencv/opencv/build/x64/vc16/lib/ -lopencv_world490d

@@ -28,7 +28,7 @@ void CameraWidget::initParameter()
     emit finishSelectCalibLine(mLine.p1(), mLine.p2());
     emit finishSelectCalibPoint(mPoint.x(), mPoint.y());
     emit finishSelectProcessArea(mRect);
-    emit finishSelectedTransformPoints(transformPoints[0], transformPoints[1], transformPoints[2], transformPoints[3]);
+    //emit finishSelectedTransformPoints(transformPoints[0], transformPoints[1], transformPoints[2], transformPoints[3]);
 
     update();
 }
@@ -50,14 +50,14 @@ void CameraWidget::changeSize(int w, int h)
 
     mRect.setRect(mRect.x() * wRatio, mRect.y() * hRatio, mRect.width() * wRatio, mRect.height() * hRatio);
 
-    transformPoints[0].setX(transformPoints[0].x() * wRatio);
+    /*transformPoints[0].setX(transformPoints[0].x() * wRatio);
     transformPoints[0].setY(transformPoints[0].y() * hRatio);
     transformPoints[1].setX(transformPoints[1].x() * wRatio);
     transformPoints[1].setY(transformPoints[1].y() * hRatio);
     transformPoints[2].setX(transformPoints[2].x() * wRatio);
     transformPoints[2].setY(transformPoints[2].y() * hRatio);
     transformPoints[3].setX(transformPoints[3].x() * wRatio);
-    transformPoints[3].setY(transformPoints[3].y() * hRatio);
+    transformPoints[3].setY(transformPoints[3].y() * hRatio);*/
 
 
     QRect size = geometry();
@@ -76,7 +76,7 @@ void CameraWidget::changeSize(int w, int h)
     emit finishSelectCalibLine(mLine.p1(), mLine.p2());
     emit finishSelectCalibPoint(mPoint.x(), mPoint.y());
     emit finishSelectProcessArea(mRect);
-    emit finishSelectedTransformPoints(transformPoints[0], transformPoints[1], transformPoints[2], transformPoints[3]);
+    //emit finishSelectedTransformPoints(transformPoints[0], transformPoints[1], transformPoints[2], transformPoints[3]);
 }
 
 void CameraWidget::saveSetting()
@@ -86,10 +86,10 @@ void CameraWidget::saveSetting()
     settings.setValue("line", mLine);
     settings.setValue("rect", mRect);
     settings.setValue("point", mPoint);
-    settings.setValue("transpoint1", transformPoints[0]);
+    /*settings.setValue("transpoint1", transformPoints[0]);
     settings.setValue("transpoint2", transformPoints[1]);
     settings.setValue("transpoint3", transformPoints[2]);
-    settings.setValue("transpoint4", transformPoints[3]);
+    settings.setValue("transpoint4", transformPoints[3]);*/
 }
 
 void CameraWidget::loadSetting()
@@ -102,16 +102,16 @@ void CameraWidget::loadSetting()
 
     mPoint = settings.value("point").toPoint();
 
-    transformPoints[0] = settings.value("transpoint1").toPoint();
+    /*transformPoints[0] = settings.value("transpoint1").toPoint();
     transformPoints[1] = settings.value("transpoint2").toPoint();
     transformPoints[2] = settings.value("transpoint3").toPoint();
-    transformPoints[3] = settings.value("transpoint4").toPoint();
+    transformPoints[3] = settings.value("transpoint4").toPoint();*/
 
     emit finishMeasureSpace(sqrt(pow(mLine.x1() - mLine.x2(), 2) + pow(mLine.y1() - mLine.y2(), 2)));
     emit finishSelectCalibLine(mLine.p1(), mLine.p2());
     emit finishSelectCalibPoint(mPoint.x(), mPoint.y());
     emit finishSelectProcessArea(mRect);
-    emit finishSelectedTransformPoints(transformPoints[0], transformPoints[1], transformPoints[2], transformPoints[3]);
+    //emit finishSelectedTransformPoints(transformPoints[0], transformPoints[1], transformPoints[2], transformPoints[3]);
 }
 
 void CameraWidget::mousePressEvent(QMouseEvent *event)
@@ -132,14 +132,14 @@ void CameraWidget::mousePressEvent(QMouseEvent *event)
             rectPointPosClicked = 2;
         }
 
-        transformOrder = -1;
+        /*transformOrder = -1;
         for (int i = 0; i < 4; ++i) {
             if(abs(transformPoints[i].x() - event->pos().x()) < 5 &&
                 abs(transformPoints[i].y() - event->pos().y()) < 5) {
                 transformOrder = i;
                 break;
             }
-        }
+        }*/
 
     }else if(selectedCalibTool == LINE){
         linePointPosClicked = -1;
@@ -175,10 +175,10 @@ void CameraWidget::mouseMoveEvent(QMouseEvent *event)
                 mRect.setBottomRight(event->pos());
                 emit finishSelectProcessArea(mRect);
             }
-            if (transformOrder != -1) {
+            /*if (transformOrder != -1) {
                 transformPoints[transformOrder] = event->pos();
                 emit finishSelectedTransformPoints(transformPoints[0], transformPoints[1], transformPoints[2], transformPoints[3]);
-            }
+            }*/
         }else if(selectedCalibTool == LINE){
             if (linePointPosClicked == 1) {
                 mLine.setP1(event->pos());
@@ -204,7 +204,7 @@ void CameraWidget::mouseReleaseEvent(QMouseEvent *event)
     emit finishMeasureSpace(sqrt(pow(mLine.x1() - mLine.x2(), 2) + pow(mLine.y1() - mLine.y2(), 2)));
     emit finishSelectCalibLine(mLine.p1(), mLine.p2());
     emit finishSelectProcessArea(mRect);
-    emit finishSelectedTransformPoints(transformPoints[0], transformPoints[1], transformPoints[2], transformPoints[3]);
+    //emit finishSelectedTransformPoints(transformPoints[0], transformPoints[1], transformPoints[2], transformPoints[3]);
     emit finishSelectCalibPoint(mPoint.x(), mPoint.y());
 
     //qDebug() << "x in cam: " << mPoint.x();

@@ -1,36 +1,79 @@
 N0 M98 PclearObjects
 N5 G28
 
-;variable
-N10 G01 X0 Y0 Z-300
+;Set accel and speed
+N10 M204 A1200
+N15 G01 F50
 
-;wait 10 ms
-N15 G04 P10
+;Safe position
+N20 G01 X0 Y0 Z-300
 
-;check
-N20 IF [#O1_Y == NULL] THEN GOTO 15
+;declare variable
+N25 #Counter = 0
+N30 #Offset = 57
+N35 #Xorder = 0
+N40 #Yorder = 0
+N45 #Zorder = 0
 
-;
-N25 [#O1_T]
-N30 IF [#O1_T == 1] THEN GOTO 50
-N35 IF [#O1_T == 2] THEN GOTO 60
-N40 IF [#O1_T == 3] THEN GOTO 70
-N45 GOTO 80
+;delay 10 ms
+N50 G04 P10
 
-;
-N50 G01 X1 Y1 Z1
-N55 GOTO 80
-
-;
-N60 G01 X2 Y2 Z2
-N65 GOTO 80
-
-;
-N70 G01 X3 Y3 Z3
-N75 GOTO 80
+;detect object
+N55 IF [#O1_Y == NULL] THEN GOTO 50
+N60 G04 P10
+N65 IF [[#O1_Y < 20] AND [#O1_Y > -120]] THEN GOTO 75
+N70 GOTO 60
 
 ;
-N80 M98 PdeleteFirstObject
+N75 G01 X[#O1_X] Y[#O1_Y + 70] Z-300
+N80 G04 P10
+N85 IF [#O1_Y < [#Y - #Offset]] THEN GOTO 80
+
+;Move to object
+
+;N85 G01 X[#O1_X] Y[#Y + #Offset] Z-300
+
+;Open vacuum
+N90 M05
+
+;Pick up
+N95 G01 Z-355
+N100 G01 Z-300
+
+;Drop down
+N105 IF [#O1_T == 1] THEN GOTO 120
+N110 IF [#O1_T == 2] THEN GOTO 140
+N115 IF [#O1_T == 3] THEN GOTO 160
 
 ;
-N85 GOTO 15
+N120 #Xorder = -70
+N125 #Yorder = -50
+N130 #Zorder = -300
+N135 GOTO 180
+
+;
+N140 #Xorder = -70
+N145 #Yorder = 0 
+N150 #Zorder = -300
+N155 GOTO 180
+
+;
+N160 #Xorder = -70
+N165 #Yorder = 50
+N170 #Zorder = -300
+N175 GOTO 180
+
+;
+N180 G04 P10
+N185 G01 X[#Xorder] Y[#Yorder] Z[#Zorder]
+
+;
+N190 G04 P20
+N195 M04
+N200 G04 P20
+
+;Delete the object juts processed
+N205 M98 PdeleteFirstObject
+
+;
+N210 GOTO 55

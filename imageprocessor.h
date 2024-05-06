@@ -13,10 +13,10 @@
 #include <QLineEdit>
 #include <qgenericmatrix.h>
 
-
 #include "camerawidget.h"
 #include "hsvwindow.h"
 #include "objectmanager.h"
+
 
 #define RED_COLOR       cv::Scalar(0, 0, 255)
 #define GREEN_COLOR     cv::Scalar(0, 255, 0)
@@ -73,6 +73,7 @@ public slots:
 
     void updateCameraScreen();
     void captureCamera();
+    void getImgFromThread(cv::Mat *);
     void saveImage();
     void openParameterPanel(bool);
 
@@ -91,6 +92,8 @@ public slots:
 
     void saveSetting();
     void loadSetting();
+
+    
 
 signals:
     void objectPositionChanged(std::vector<cv::RotatedRect> objectContainer);
@@ -177,6 +180,7 @@ private:
     float processDistanceValue = 0;
 
     int visibleCounter{ 0 };
+
 };
 
 #endif // IMAGEPROCESSOR_H

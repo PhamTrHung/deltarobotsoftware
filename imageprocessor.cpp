@@ -118,7 +118,7 @@ void ImageProcessor::displayAdditionalInfor()
     drawCorner(calibImage, cv::Point(PSelectedRect.x + PSelectedRect.width, PSelectedRect.y + PSelectedRect.height));
 
     //Draw perspective area
-    if (!isPerspectiveMode) {
+    /*if (!isPerspectiveMode) {
         if (DPerspectivePoints != NULL) {
             for (int i = 0; i < 3; ++i) {
                 drawBlackWhiteLine(calibImage, PPerspectivePoints[i], PPerspectivePoints[i + 1], thin);
@@ -127,7 +127,7 @@ void ImageProcessor::displayAdditionalInfor()
             drawBlackWhiteLine(calibImage, PPerspectivePoints[3], PPerspectivePoints[0], thin);
             drawCorner(calibImage, PPerspectivePoints[3]);
         }
-    }
+    }*/
     
     //Point
     cv::rectangle(calibImage, cv::Rect(PcalibPoint.x - 2, PcalibPoint.y - 2, 5, 5), WHITE_COLOR, cv::FILLED);
@@ -164,7 +164,6 @@ void ImageProcessor::loadCamera(bool state)
         camera->release();
         return;
     }
-
 }
 
 void ImageProcessor::updateCameraScreen()
@@ -185,8 +184,11 @@ void ImageProcessor::captureCamera()
     processImage();
 
     updateObjectPositionOnConveyor();
+}
 
-    //updateLabelImage(captureImage, lbResultImage);
+void ImageProcessor::getImgFromThread(cv::Mat*)
+{
+
 }
 
 void ImageProcessor::saveImage()
@@ -353,7 +355,7 @@ void ImageProcessor::processImage()
 
     //Copy to calib image
     captureImage.copyTo(calibImage);
-    if (isPerspectiveMode) transformPerspective(calibImage, PPerspectivePoints, calibImage);
+    //if (isPerspectiveMode) transformPerspective(calibImage, PPerspectivePoints, calibImage);
 
     //Filter image
     HSV_CaptureImage = captureImage.clone();
@@ -376,7 +378,6 @@ void ImageProcessor::processImage()
 
     //reset visiableCounter
     visibleCounter = 0;
-
     for (uint8_t i = 0; i < 3; i++) {
 
         minScalar = cv::Scalar(HSV_OBJECT[i][0], HSV_OBJECT[i][2], HSV_OBJECT[i][4]);
@@ -387,7 +388,7 @@ void ImageProcessor::processImage()
         
         detectObject(objectImage[i], resultImage, BLUE_COLOR, nameObjectInfor[i], i);
     }
-    
+
     //Update object tracking infor
     updateTrackingInfor();
 

@@ -45,7 +45,7 @@ public:
     QPushButton *btnTurnOnConveyor;
     QLineEdit *leSpeedConveyor;
     QTabWidget *tabWidget_2;
-    QWidget *tab;
+    QWidget *t3d;
     QWidget *t2D;
     QGroupBox *groupBox_6;
     QSlider *sldZAdjustion;
@@ -296,15 +296,21 @@ public:
         leSpeedConveyor->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
         tabWidget_2 = new QTabWidget(tab1);
         tabWidget_2->setObjectName("tabWidget_2");
-        tabWidget_2->setGeometry(QRect(390, 30, 431, 441));
-        tab = new QWidget();
-        tab->setObjectName("tab");
-        tabWidget_2->addTab(tab, QString());
+        tabWidget_2->setEnabled(true);
+        tabWidget_2->setGeometry(QRect(390, 30, 441, 441));
+        QSizePolicy sizePolicy2(QSizePolicy::Fixed, QSizePolicy::Fixed);
+        sizePolicy2.setHorizontalStretch(0);
+        sizePolicy2.setVerticalStretch(0);
+        sizePolicy2.setHeightForWidth(tabWidget_2->sizePolicy().hasHeightForWidth());
+        tabWidget_2->setSizePolicy(sizePolicy2);
+        t3d = new QWidget();
+        t3d->setObjectName("t3d");
+        tabWidget_2->addTab(t3d, QString());
         t2D = new QWidget();
         t2D->setObjectName("t2D");
         groupBox_6 = new QGroupBox(t2D);
         groupBox_6->setObjectName("groupBox_6");
-        groupBox_6->setGeometry(QRect(10, 10, 411, 391));
+        groupBox_6->setGeometry(QRect(10, 10, 421, 391));
         groupBox_6->setFlat(true);
         groupBox_6->setCheckable(false);
         sldZAdjustion = new QSlider(groupBox_6);
@@ -350,7 +356,7 @@ public:
         wg2d = new QWidget(groupBox_6);
         wg2d->setObjectName("wg2d");
         wg2d->setEnabled(true);
-        wg2d->setGeometry(QRect(50, 30, 370, 355));
+        wg2d->setGeometry(QRect(40, 30, 370, 355));
         wg2d->setStyleSheet(QString::fromUtf8(""));
         btnVacuum = new QPushButton(groupBox_6);
         btnVacuum->setObjectName("btnVacuum");
@@ -376,11 +382,11 @@ public:
         gbMotionControl = new QGroupBox(tab1);
         gbMotionControl->setObjectName("gbMotionControl");
         gbMotionControl->setGeometry(QRect(10, 120, 371, 221));
-        QSizePolicy sizePolicy2(QSizePolicy::Minimum, QSizePolicy::Minimum);
-        sizePolicy2.setHorizontalStretch(0);
-        sizePolicy2.setVerticalStretch(1);
-        sizePolicy2.setHeightForWidth(gbMotionControl->sizePolicy().hasHeightForWidth());
-        gbMotionControl->setSizePolicy(sizePolicy2);
+        QSizePolicy sizePolicy3(QSizePolicy::Minimum, QSizePolicy::Minimum);
+        sizePolicy3.setHorizontalStretch(0);
+        sizePolicy3.setVerticalStretch(1);
+        sizePolicy3.setHeightForWidth(gbMotionControl->sizePolicy().hasHeightForWidth());
+        gbMotionControl->setSizePolicy(sizePolicy3);
         gbMotionControl->setFont(font);
         gbMotionControl->setFocusPolicy(Qt::NoFocus);
         gbMotionControl->setStyleSheet(QString::fromUtf8("QGroupBox{\n"
@@ -396,11 +402,11 @@ public:
         btnGo = new QPushButton(gbMotionControl);
         btnGo->setObjectName("btnGo");
         btnGo->setGeometry(QRect(10, 20, 41, 21));
-        QSizePolicy sizePolicy3(QSizePolicy::Maximum, QSizePolicy::Preferred);
-        sizePolicy3.setHorizontalStretch(0);
-        sizePolicy3.setVerticalStretch(0);
-        sizePolicy3.setHeightForWidth(btnGo->sizePolicy().hasHeightForWidth());
-        btnGo->setSizePolicy(sizePolicy3);
+        QSizePolicy sizePolicy4(QSizePolicy::Maximum, QSizePolicy::Preferred);
+        sizePolicy4.setHorizontalStretch(0);
+        sizePolicy4.setVerticalStretch(0);
+        sizePolicy4.setHeightForWidth(btnGo->sizePolicy().hasHeightForWidth());
+        btnGo->setSizePolicy(sizePolicy4);
         btnGo->setStyleSheet(QString::fromUtf8("QPushButton\n"
 "{\n"
 "	border:none;\n"
@@ -544,11 +550,11 @@ public:
         label_10 = new QLabel(groupBox_4);
         label_10->setObjectName("label_10");
         label_10->setGeometry(QRect(11, 31, 16, 21));
-        QSizePolicy sizePolicy4(QSizePolicy::Preferred, QSizePolicy::Minimum);
-        sizePolicy4.setHorizontalStretch(0);
-        sizePolicy4.setVerticalStretch(0);
-        sizePolicy4.setHeightForWidth(label_10->sizePolicy().hasHeightForWidth());
-        label_10->setSizePolicy(sizePolicy4);
+        QSizePolicy sizePolicy5(QSizePolicy::Preferred, QSizePolicy::Minimum);
+        sizePolicy5.setHorizontalStretch(0);
+        sizePolicy5.setVerticalStretch(0);
+        sizePolicy5.setHeightForWidth(label_10->sizePolicy().hasHeightForWidth());
+        label_10->setSizePolicy(sizePolicy5);
         label_10->setStyleSheet(QString::fromUtf8("\n"
 "QLabel{font: 700 12pt \"Segoe UI\";\n"
 "	background-color: none;\n"
@@ -575,8 +581,8 @@ public:
         lbX = new QLabel(groupBox_4);
         lbX->setObjectName("lbX");
         lbX->setGeometry(QRect(51, 31, 41, 21));
-        sizePolicy4.setHeightForWidth(lbX->sizePolicy().hasHeightForWidth());
-        lbX->setSizePolicy(sizePolicy4);
+        sizePolicy5.setHeightForWidth(lbX->sizePolicy().hasHeightForWidth());
+        lbX->setSizePolicy(sizePolicy5);
         lbX->setStyleSheet(QString::fromUtf8("QWidget{\n"
 "background-color: none;\n"
 "}"));
@@ -689,11 +695,11 @@ public:
         leZValue = new QLineEdit(gbMotionControl);
         leZValue->setObjectName("leZValue");
         leZValue->setGeometry(QRect(280, 30, 61, 22));
-        QSizePolicy sizePolicy5(QSizePolicy::Expanding, QSizePolicy::Fixed);
-        sizePolicy5.setHorizontalStretch(0);
-        sizePolicy5.setVerticalStretch(0);
-        sizePolicy5.setHeightForWidth(leZValue->sizePolicy().hasHeightForWidth());
-        leZValue->setSizePolicy(sizePolicy5);
+        QSizePolicy sizePolicy6(QSizePolicy::Expanding, QSizePolicy::Fixed);
+        sizePolicy6.setHorizontalStretch(0);
+        sizePolicy6.setVerticalStretch(0);
+        sizePolicy6.setHeightForWidth(leZValue->sizePolicy().hasHeightForWidth());
+        leZValue->setSizePolicy(sizePolicy6);
         leZValue->setStyleSheet(QString::fromUtf8("background-color:none;"));
         leYValue = new QLineEdit(gbMotionControl);
         leYValue->setObjectName("leYValue");
@@ -782,11 +788,11 @@ public:
         label_4 = new QLabel(groupBox_3);
         label_4->setObjectName("label_4");
         label_4->setGeometry(QRect(11, 30, 75, 20));
-        QSizePolicy sizePolicy6(QSizePolicy::Preferred, QSizePolicy::Maximum);
-        sizePolicy6.setHorizontalStretch(0);
-        sizePolicy6.setVerticalStretch(0);
-        sizePolicy6.setHeightForWidth(label_4->sizePolicy().hasHeightForWidth());
-        label_4->setSizePolicy(sizePolicy6);
+        QSizePolicy sizePolicy7(QSizePolicy::Preferred, QSizePolicy::Maximum);
+        sizePolicy7.setHorizontalStretch(0);
+        sizePolicy7.setVerticalStretch(0);
+        sizePolicy7.setHeightForWidth(label_4->sizePolicy().hasHeightForWidth());
+        label_4->setSizePolicy(sizePolicy7);
         label_4->setStyleSheet(QString::fromUtf8("\n"
 "\n"
 "QLabel{font: 700 11pt \"Segoe UI\";\n"
@@ -799,8 +805,8 @@ public:
         label_5 = new QLabel(groupBox_3);
         label_5->setObjectName("label_5");
         label_5->setGeometry(QRect(110, 30, 113, 20));
-        sizePolicy6.setHeightForWidth(label_5->sizePolicy().hasHeightForWidth());
-        label_5->setSizePolicy(sizePolicy6);
+        sizePolicy7.setHeightForWidth(label_5->sizePolicy().hasHeightForWidth());
+        label_5->setSizePolicy(sizePolicy7);
         label_5->setStyleSheet(QString::fromUtf8("\n"
 "QLabel{font: 700 11pt \"Segoe UI\";\n"
 "	background-color: none;\n"
@@ -809,8 +815,8 @@ public:
         label_6 = new QLabel(groupBox_3);
         label_6->setObjectName("label_6");
         label_6->setGeometry(QRect(240, 30, 104, 20));
-        sizePolicy6.setHeightForWidth(label_6->sizePolicy().hasHeightForWidth());
-        label_6->setSizePolicy(sizePolicy6);
+        sizePolicy7.setHeightForWidth(label_6->sizePolicy().hasHeightForWidth());
+        label_6->setSizePolicy(sizePolicy7);
         label_6->setStyleSheet(QString::fromUtf8("\n"
 "QLabel{font: 700 11pt \"Segoe UI\";\n"
 "	background-color: none;\n"
@@ -871,11 +877,11 @@ public:
         verticalLayout->setContentsMargins(-1, 4, -1, 1);
         btnSettingConnect = new QPushButton(widget);
         btnSettingConnect->setObjectName("btnSettingConnect");
-        QSizePolicy sizePolicy7(QSizePolicy::Preferred, QSizePolicy::Fixed);
-        sizePolicy7.setHorizontalStretch(0);
-        sizePolicy7.setVerticalStretch(0);
-        sizePolicy7.setHeightForWidth(btnSettingConnect->sizePolicy().hasHeightForWidth());
-        btnSettingConnect->setSizePolicy(sizePolicy7);
+        QSizePolicy sizePolicy8(QSizePolicy::Preferred, QSizePolicy::Fixed);
+        sizePolicy8.setHorizontalStretch(0);
+        sizePolicy8.setVerticalStretch(0);
+        sizePolicy8.setHeightForWidth(btnSettingConnect->sizePolicy().hasHeightForWidth());
+        btnSettingConnect->setSizePolicy(sizePolicy8);
         btnSettingConnect->setStyleSheet(QString::fromUtf8("QPushButton\n"
 "{\n"
 "	border:none;\n"
@@ -994,11 +1000,8 @@ public:
         leIDCam = new QLineEdit(groupBox_7);
         leIDCam->setObjectName("leIDCam");
         leIDCam->setGeometry(QRect(122, 23, 30, 25));
-        QSizePolicy sizePolicy8(QSizePolicy::Fixed, QSizePolicy::Fixed);
-        sizePolicy8.setHorizontalStretch(0);
-        sizePolicy8.setVerticalStretch(0);
-        sizePolicy8.setHeightForWidth(leIDCam->sizePolicy().hasHeightForWidth());
-        leIDCam->setSizePolicy(sizePolicy8);
+        sizePolicy2.setHeightForWidth(leIDCam->sizePolicy().hasHeightForWidth());
+        leIDCam->setSizePolicy(sizePolicy2);
         leIDCam->setMaximumSize(QSize(30, 25));
         leIDCam->setStyleSheet(QString::fromUtf8("QLineEdit{\n"
 "	background-color: none;\n"
@@ -1006,8 +1009,8 @@ public:
         leFPS = new QLineEdit(groupBox_7);
         leFPS->setObjectName("leFPS");
         leFPS->setGeometry(QRect(122, 55, 30, 25));
-        sizePolicy8.setHeightForWidth(leFPS->sizePolicy().hasHeightForWidth());
-        leFPS->setSizePolicy(sizePolicy8);
+        sizePolicy2.setHeightForWidth(leFPS->sizePolicy().hasHeightForWidth());
+        leFPS->setSizePolicy(sizePolicy2);
         leFPS->setMaximumSize(QSize(30, 25));
         btnStartProgram = new QPushButton(tab3);
         btnStartProgram->setObjectName("btnStartProgram");
@@ -1345,8 +1348,8 @@ public:
 
         retranslateUi(MainWindow);
 
-        tabWidget->setCurrentIndex(2);
-        tabWidget_2->setCurrentIndex(1);
+        tabWidget->setCurrentIndex(1);
+        tabWidget_2->setCurrentIndex(0);
 
 
         QMetaObject::connectSlotsByName(MainWindow);
@@ -1365,9 +1368,9 @@ public:
         leSpeedConveyor->setAccessibleDescription(QString());
 #endif // QT_CONFIG(accessibility)
         leSpeedConveyor->setInputMask(QString());
-        leSpeedConveyor->setText(QCoreApplication::translate("MainWindow", "200", nullptr));
+        leSpeedConveyor->setText(QCoreApplication::translate("MainWindow", "80", nullptr));
         leSpeedConveyor->setPlaceholderText(QCoreApplication::translate("MainWindow", "mm/s", nullptr));
-        tabWidget_2->setTabText(tabWidget_2->indexOf(tab), QCoreApplication::translate("MainWindow", "3D", nullptr));
+        tabWidget_2->setTabText(tabWidget_2->indexOf(t3d), QCoreApplication::translate("MainWindow", "3D", nullptr));
         groupBox_6->setTitle(QCoreApplication::translate("MainWindow", "2D Mode", nullptr));
         btnVacuum->setText(QString());
         label_15->setText(QCoreApplication::translate("MainWindow", "Vacuum", nullptr));
@@ -1434,7 +1437,7 @@ public:
         lbTrackingObjectNumber->setText(QCoreApplication::translate("MainWindow", "0", nullptr));
         lbVisibleObjectNumber->setText(QCoreApplication::translate("MainWindow", "0", nullptr));
         label_14->setText(QCoreApplication::translate("MainWindow", "Visible", nullptr));
-        label_13->setText(QCoreApplication::translate("MainWindow", "Tracking", nullptr));
+        label_13->setText(QCoreApplication::translate("MainWindow", "Sum", nullptr));
         btnGCodeView->setText(QCoreApplication::translate("MainWindow", "GCode View", nullptr));
         groupBox->setTitle(QCoreApplication::translate("MainWindow", "Measurement", nullptr));
         btnLine->setText(QCoreApplication::translate("MainWindow", " Line         ", nullptr));
