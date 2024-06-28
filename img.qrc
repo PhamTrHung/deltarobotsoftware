@@ -33,5 +33,9 @@
         <file>icons/ROBOT AT VNUA 2.png</file>
         <file>icons/ROBOT AT VNUA 3.png</file>
         <file>icons/arrow-up.png</file>
+        <file>mainwindow.ico</file>
+        <file>winadmin.rc</file>
+        <file>Qt6EntryPoint.lib</file>
+        <file>Qt6EntryPointd.lib</file>
     </qresource>
 </RCC>

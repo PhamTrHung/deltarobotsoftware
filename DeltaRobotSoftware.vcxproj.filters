@@ -216,6 +216,9 @@
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="DeltaRobotSoftware.rc" />
+    <ResourceCompile Include="winadmin.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="icons\file.png">
@@ -246,6 +249,9 @@
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="icons\arrow-up.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="mainwindow.ico">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

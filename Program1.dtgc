@@ -1,7 +1,7 @@
 
 ;Test delta robot
 N0 G28
-N5 G01 F20
+N5 G01 F300
 N10 #100 = 0
 N15 #100 = #100 + 1
 
@@ -16,7 +16,7 @@ N50 G01 X-70 Y0 Z-300
 N55 M99
 
 ;
-N60 G04 P1000
+N60 G04 P2000
 N65 IF [#100 LE 5] THEN GOTO 15
 
 ;

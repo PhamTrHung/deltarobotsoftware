@@ -249,16 +249,21 @@ public:
         horizontalLayout_4->setObjectName("horizontalLayout_4");
         leObject1Name = new QLineEdit(HSVWindow);
         leObject1Name->setObjectName("leObject1Name");
+        leObject1Name->setEnabled(true);
+        leObject1Name->setFrame(true);
+        leObject1Name->setReadOnly(true);
 
         horizontalLayout_4->addWidget(leObject1Name);
 
         leObject2Name = new QLineEdit(HSVWindow);
         leObject2Name->setObjectName("leObject2Name");
+        leObject2Name->setReadOnly(true);
 
         horizontalLayout_4->addWidget(leObject2Name);
 
         leObject3Name = new QLineEdit(HSVWindow);
         leObject3Name->setObjectName("leObject3Name");
+        leObject3Name->setReadOnly(true);
 
         horizontalLayout_4->addWidget(leObject3Name);
 
@@ -290,9 +295,9 @@ public:
         btnObject1->setText(QCoreApplication::translate("HSVWindow", "Add Object 1", nullptr));
         btnObject2->setText(QCoreApplication::translate("HSVWindow", "Add Object 2", nullptr));
         btnObject3->setText(QCoreApplication::translate("HSVWindow", "Add Object 3", nullptr));
-        leObject1Name->setText(QCoreApplication::translate("HSVWindow", "Object 1", nullptr));
-        leObject2Name->setText(QCoreApplication::translate("HSVWindow", "Object 2", nullptr));
-        leObject3Name->setText(QCoreApplication::translate("HSVWindow", "Object 3", nullptr));
+        leObject1Name->setText(QCoreApplication::translate("HSVWindow", "KitKat 1", nullptr));
+        leObject2Name->setText(QCoreApplication::translate("HSVWindow", "KitKat 2", nullptr));
+        leObject3Name->setText(QCoreApplication::translate("HSVWindow", "KitKat 3", nullptr));
     } // retranslateUi
 
 };

@@ -360,6 +360,7 @@ void ImageProcessor::processImage()
     //Filter image
     HSV_CaptureImage = captureImage.clone();
     cv::cvtColor(HSV_CaptureImage, HSV_CaptureImage, cv::COLOR_BGR2HSV);
+
     for (uint8_t i = 0; i < 3; ++i) {
             HSV_CaptureImage.copyTo(objectImage[i]);
     }
@@ -367,14 +368,18 @@ void ImageProcessor::processImage()
     cv::Scalar minScalar(HSV_Value[0], HSV_Value[2], HSV_Value[4]);
     cv::Scalar maxScalar( HSV_Value[1],HSV_Value[3],HSV_Value[5]);
 
-    cv::inRange(HSV_CaptureImage, minScalar, maxScalar, HSV_CaptureImage);
 
+    cv::inRange(HSV_CaptureImage, minScalar, maxScalar, HSV_CaptureImage);
     selectProcessingRegion(HSV_CaptureImage);
 
 
+    
+    //cv::erode(HSV_CaptureImage, HSV_CaptureImage, cv::getStructuringElement(cv::MORPH_RECT, cv::Size(3, 3)));
+    //cv::dilate(HSV_CaptureImage, HSV_CaptureImage, cv::getStructuringElement(cv::MORPH_RECT, cv::Size(3, 3)));
+
     //detect objects in image
     captureImage.copyTo(resultImage);
-    //detectObject(HSV_CaptureImage, resultImage, BLUE_COLOR, "Blue");
+    //detectObject(HSV_CaptureImage, resultImage, BLUE_COLOR, "Blue", 1);
 
     //reset visiableCounter
     visibleCounter = 0;
@@ -388,7 +393,7 @@ void ImageProcessor::processImage()
         
         detectObject(objectImage[i], resultImage, BLUE_COLOR, nameObjectInfor[i], i);
     }
-
+    
     //Update object tracking infor
     updateTrackingInfor();
 
@@ -446,7 +451,15 @@ void ImageProcessor::detectObject(cv::Mat input, cv::Mat output, cv::Scalar colo
         //     obWid = t;
         // }
 
-        if(h > 100 && w > 100){
+        if(h > 150 && w > 80){
+            /*if (w < 180 && objNum != 1) {
+                TextDisplay = "KitKat 1";
+                objNum = 0;
+            }
+            else if(w > 180 && objNum != 1) {
+                TextDisplay = "KitKat 3";
+                objNum = 2;
+            }*/
             findObjectRectangle(output, contoursContainer[i], color, TextDisplay, objNum);
             visibleCounter += 1;
         }

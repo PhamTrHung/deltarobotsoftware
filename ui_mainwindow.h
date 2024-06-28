@@ -45,13 +45,13 @@ public:
     QPushButton *btnTurnOnConveyor;
     QLineEdit *leSpeedConveyor;
     QTabWidget *tabWidget_2;
-    QWidget *t3d;
     QWidget *t2D;
     QGroupBox *groupBox_6;
     QSlider *sldZAdjustion;
     QWidget *wg2d;
     QPushButton *btnVacuum;
     QLabel *label_15;
+    QWidget *tab;
     QGroupBox *gbMotionControl;
     QPushButton *btnGo;
     QPushButton *btnForward;
@@ -303,9 +303,6 @@ public:
         sizePolicy2.setVerticalStretch(0);
         sizePolicy2.setHeightForWidth(tabWidget_2->sizePolicy().hasHeightForWidth());
         tabWidget_2->setSizePolicy(sizePolicy2);
-        t3d = new QWidget();
-        t3d->setObjectName("t3d");
-        tabWidget_2->addTab(t3d, QString());
         t2D = new QWidget();
         t2D->setObjectName("t2D");
         groupBox_6 = new QGroupBox(t2D);
@@ -379,6 +376,9 @@ public:
         label_15->setFont(font1);
         label_15->setStyleSheet(QString::fromUtf8("	background-color: none;"));
         tabWidget_2->addTab(t2D, QString());
+        tab = new QWidget();
+        tab->setObjectName("tab");
+        tabWidget_2->addTab(tab, QString());
         gbMotionControl = new QGroupBox(tab1);
         gbMotionControl->setObjectName("gbMotionControl");
         gbMotionControl->setGeometry(QRect(10, 120, 371, 221));
@@ -1292,7 +1292,7 @@ public:
 "	background-color: rgb(255, 236, 139);\n"
 "}"));
         QIcon icon16;
-        icon16.addFile(QString::fromUtf8("icons/save.png"), QSize(), QIcon::Normal, QIcon::Off);
+        icon16.addFile(QString::fromUtf8(":/icons/save.png"), QSize(), QIcon::Normal, QIcon::Off);
         btnSaveSettings->setIcon(icon16);
         btnLoadSettings = new QPushButton(groupBox);
         btnLoadSettings->setObjectName("btnLoadSettings");
@@ -1308,7 +1308,7 @@ public:
 "	background-color: rgb(255, 236, 139);\n"
 "}"));
         QIcon icon17;
-        icon17.addFile(QString::fromUtf8("icons/file.png"), QSize(), QIcon::Normal, QIcon::Off);
+        icon17.addFile(QString::fromUtf8(":/icons/file.png"), QSize(), QIcon::Normal, QIcon::Off);
         btnLoadSettings->setIcon(icon17);
         label_18->raise();
         label_19->raise();
@@ -1348,7 +1348,7 @@ public:
 
         retranslateUi(MainWindow);
 
-        tabWidget->setCurrentIndex(1);
+        tabWidget->setCurrentIndex(2);
         tabWidget_2->setCurrentIndex(0);
 
 
@@ -1370,11 +1370,11 @@ public:
         leSpeedConveyor->setInputMask(QString());
         leSpeedConveyor->setText(QCoreApplication::translate("MainWindow", "80", nullptr));
         leSpeedConveyor->setPlaceholderText(QCoreApplication::translate("MainWindow", "mm/s", nullptr));
-        tabWidget_2->setTabText(tabWidget_2->indexOf(t3d), QCoreApplication::translate("MainWindow", "3D", nullptr));
         groupBox_6->setTitle(QCoreApplication::translate("MainWindow", "2D Mode", nullptr));
         btnVacuum->setText(QString());
         label_15->setText(QCoreApplication::translate("MainWindow", "Vacuum", nullptr));
         tabWidget_2->setTabText(tabWidget_2->indexOf(t2D), QCoreApplication::translate("MainWindow", "2D", nullptr));
+        tabWidget_2->setTabText(tabWidget_2->indexOf(tab), QCoreApplication::translate("MainWindow", "3D", nullptr));
         gbMotionControl->setTitle(QCoreApplication::translate("MainWindow", "Motion control", nullptr));
         btnGo->setText(QCoreApplication::translate("MainWindow", "Go", nullptr));
         btnForward->setText(QCoreApplication::translate("MainWindow", "X", nullptr));
@@ -1439,7 +1439,7 @@ public:
         label_14->setText(QCoreApplication::translate("MainWindow", "Visible", nullptr));
         label_13->setText(QCoreApplication::translate("MainWindow", "Sum", nullptr));
         btnGCodeView->setText(QCoreApplication::translate("MainWindow", "GCode View", nullptr));
-        groupBox->setTitle(QCoreApplication::translate("MainWindow", "Measurement", nullptr));
+        groupBox->setTitle(QCoreApplication::translate("MainWindow", "Calibration", nullptr));
         btnLine->setText(QCoreApplication::translate("MainWindow", " Line         ", nullptr));
         btnPoint->setText(QCoreApplication::translate("MainWindow", " Point       ", nullptr));
         btnRectangle->setText(QCoreApplication::translate("MainWindow", "Rectangle", nullptr));

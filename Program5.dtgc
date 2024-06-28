@@ -2,15 +2,15 @@ N0 M98 PclearObjects
 N5 G28
 
 ;Set accel and speed
-N10 M204 A1200
-N15 G01 F50
+N10 M204 A3500
+N15 G01 F500
 
 ;Safe position
 N20 G01 X0 Y0 Z-300
 
 ;declare variable
 N25 #Counter = 0
-N30 #Offset = 57
+N30 #Offset = 15
 N35 #Xorder = 0
 N40 #Yorder = 0
 N45 #Zorder = 0
@@ -21,23 +21,22 @@ N50 G04 P10
 ;detect object
 N55 IF [#O1_Y == NULL] THEN GOTO 50
 N60 G04 P10
-N65 IF [[#O1_Y < 20] AND [#O1_Y > -120]] THEN GOTO 75
+N65 IF [[#O1_Y < 20] AND [#O1_Y > -150]] THEN GOTO 75
 N70 GOTO 60
 
 ;
-N75 G01 X[#O1_X] Y[#O1_Y + 70] Z-300
+N75 G01 X[#O1_X + 4] Y[#O1_Y + 45] Z-300
 N80 G04 P10
 N85 IF [#O1_Y < [#Y - #Offset]] THEN GOTO 80
 
 ;Move to object
 
-;N85 G01 X[#O1_X] Y[#Y + #Offset] Z-300
 
 ;Open vacuum
 N90 M05
 
 ;Pick up
-N95 G01 Z-355
+N95 G01 Z-370
 N100 G01 Z-300
 
 ;Drop down
@@ -46,14 +45,14 @@ N110 IF [#O1_T == 2] THEN GOTO 140
 N115 IF [#O1_T == 3] THEN GOTO 160
 
 ;
-N120 #Xorder = -70
-N125 #Yorder = -50
+N120 #Xorder = -65
+N125 #Yorder = -80
 N130 #Zorder = -300
 N135 GOTO 180
 
 ;
-N140 #Xorder = -70
-N145 #Yorder = 0 
+N140 #Xorder = -65
+N145 #Yorder = 35
 N150 #Zorder = -300
 N155 GOTO 180
 
@@ -68,9 +67,9 @@ N180 G04 P10
 N185 G01 X[#Xorder] Y[#Yorder] Z[#Zorder]
 
 ;
-N190 G04 P20
+N190 G04 P100
 N195 M04
-N200 G04 P20
+N200 G04 P100
 
 ;Delete the object juts processed
 N205 M98 PdeleteFirstObject

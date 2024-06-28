@@ -33,6 +33,8 @@ void ObjectManager::updateNewPositionObjects(float deltaY)
 {
     if (objectContainer.size() == 0) return;
 
+    //qDebug() << "Delta Y = " << deltaY;
+
     for (int i = 0; i < objectContainer.size(); ++i) {
         objectContainer.at(i).center.y += deltaY;
     }

@@ -1,50 +1,86 @@
-N0 M98 PclearObjects
-N5 G28
+N0 G28
+N5 M98 PclearObjects
 
-;set acceleration
-N10 M204 A2000
+;Acceleration
+N10 M204 A3500
 
-;set speed
-N15 G01 F40
+;Speed
+N15 G01 F500
+
+;safe position
 N20 G01 Z-300
+
+;
 N25 #Counter = 0
-N30 #Counter2 = 0
-N35 #Offset = 5
+N30 #Offset = 31
+N35 #Xorder = 0
+N40 #Yorder = 0
+N45 #Zorder = 0
+N50 #Counter1 = 0
+N55 #Counter2 = 0
+
+;
+N60 M98 PdeleteFirstObject
 
 ;Delay 10 ms
-N40 G04 P10
-;
-N45 IF [#O1_Y == NULL] THEN GOTO 40
-;
-N50 G04 P10
-;
-N55 IF [[#O1_Y < 100] AND [#O1_Y > -50]] THEN GOTO 65
-;
-N60 GOTO 50
-;
-N65 G01 X[#O1_X] Y[#O1_Y-20] Z-300 F40
-N70 G04 P10
-N75 IF [#O1_Y < [#Y - #Offset - 20]] THEN GOTO 70
-;
-N80 M05
-N85 G01 Z-350
-N90 G01 Z-300
+N65 G04 P10
 
-;Drop
-N95 #XOrder = -70
-N100 #YOrder = 0
-N105 #ZOrder = -300
+;If there is no object, go back and wait
+N70 IF [#O1_Y == NULL] THEN GOTO 65
+N75 G01 X[#O1_X + 4] Z-300
+N80 G04 P10
+N85 IF [[#O1_Y < 40] AND [#O1_Y > -100]] THEN GOTO 100
+N90 IF [#O1_Y > 40] THEN GOTO 60
+N95 GOTO 80
+
+;Open the vacuum pump, ready to pick up
+N100 M05
+
+;Move to object on conveyor
+N105 G01 Y[#O1_Y + #Offset]
+N110 G01 Y[#O1_Y + #Offset]
+
+;Pick up
+N115 G01 Z-358
+N120 G01 Z-300
+
+;Sort
+N125 IF [#O1_T == 1] THEN GOTO 135
+N130 IF [#O1_T == 2] THEN GOTO 155
+
+;counter1
+N135 #Counter1 = #Counter1 + 1
+N140 IF [#Counter1 <= 3] THEN GOTO 175
+N145 IF [[#Counter1 > 3] AND [#Counter1 <= 6]] THEN GOTO 185
+N150 GOTO 0
+
+;counter2
+N155 #Counter2 = #Counter2 + 1
+N160 IF [#Counter2 <= 3] THEN GOTO 195
+N165 IF [[#Counter2 > 3] AND [#Counter2 <= 6]] THEN GOTO 205
+N170 GOTO 0
+
+;counter1 <= 3
+N175 G01 X[-65] Y[-80]
+N180 GOTO 215
+
+;counter1 > 3
+N185 G01 X[80] Y[-80]
+N190 GOTO 215
+
+;counter2 <= 3
+N195 G01 X[-65] Y[25]
+N200 GOTO 215
+
+;counter2 > 3
+N205 G01 X[75] Y[45]
+N210 GOTO 215
 
 ;
-N110 G01 X[#XOrder] Y[#YOrder] Z[#ZOrder]
+N215 G01 Z-330
+N220 M04
+N225 G01 Z-300
 
-;
-N115 G04 P100
-N120 M04
-N125 G04 P100
-
-;
-N130 M98 PdeleteFirstObject
-
-;
-N135 GOTO 40
+;Delete the object just processed
+N230 M98 PdeleteFirstObject
+N235 GOTO 70

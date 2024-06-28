@@ -269,22 +269,37 @@ QPushButton:pressed
     <layout class="QHBoxLayout" name="horizontalLayout_4">
      <item>
       <widget class="QLineEdit" name="leObject1Name">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
        <property name="text">
-        <string>Object 1</string>
+        <string>KitKat 1</string>
+       </property>
+       <property name="frame">
+        <bool>true</bool>
+       </property>
+       <property name="readOnly">
+        <bool>true</bool>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QLineEdit" name="leObject2Name">
        <property name="text">
-        <string>Object 2</string>
+        <string>KitKat 2</string>
+       </property>
+       <property name="readOnly">
+        <bool>true</bool>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QLineEdit" name="leObject3Name">
        <property name="text">
-        <string>Object 3</string>
+        <string>KitKat 3</string>
+       </property>
+       <property name="readOnly">
+        <bool>true</bool>
        </property>
       </widget>
      </item>
